@@ -1,9 +1,24 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import {Account as AccountType, CreditCard, NetWorth, PageProps} from '@/types';
-import React, {useState} from "react";
+import {Account as AccountType, AccountBalanceHistory, CreditCard, NetWorth, PageProps} from '@/types';
+import {LineChart, Line, XAxis, YAxis, ResponsiveContainer} from 'recharts';
+import Chart from "react-apexcharts";
+import React from "react";
 
-export default function Account({ auth, account, accountBalanceHistory }: PageProps<{ account: AccountType }>) {
+export default function Account({ auth, account, accountBalanceHistory }: PageProps<{ account: AccountType, accountBalanceHistory: AccountBalanceHistory[] }>) {
+
+    const data = accountBalanceHistory.map((history) => {
+        return {
+            name: history.date,
+            amount: history.balance.amount,
+        }
+    });
+
+    const apexCategories = accountBalanceHistory.map((history) => history.date);
+    const apexSeries = [{
+        name: 'Balance',
+        data: accountBalanceHistory.map((history) => history.balance.amount),
+    }];
 
     return (
         <AuthenticatedLayout
@@ -19,7 +34,16 @@ export default function Account({ auth, account, accountBalanceHistory }: PagePr
                             <div className="flex items-center">
                                 <div className="ml-4 text-lg leading-7 font-semibold">
                                     {JSON.stringify(account)}
-                                    {JSON.stringify(accountBalanceHistory)}
+                                    <Chart
+                                        options={{
+                                            xaxis: {
+                                                categories: apexCategories,
+                                            }
+                                        }}
+                                        series={apexSeries}
+                                        type="line"
+                                        width="500"
+                                    />
                                 </div>
                             </div>
                         </div>

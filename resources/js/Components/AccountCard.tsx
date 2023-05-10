@@ -24,7 +24,7 @@ export default function AccountCard({ account }: { account: Account }) {
 
     return (
         <div
-            className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow">
+            className="max-w p-6 bg-white border border-gray-200 rounded-lg shadow">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
                  stroke="currentColor" className="w-10 h-10 mb-2 text-gray-500">
                 <path strokeLinecap="round" strokeLinejoin="round"

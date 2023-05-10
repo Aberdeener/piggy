@@ -6,7 +6,7 @@ export default function MoneyDisplay({ money, creditCard = false, className = ''
     if (creditCard) {
         colour = money.amount > 0 ? 'text-red-600' : 'text-green-600';
     } else {
-        colour = money.amount < 0 ? 'text-red-600' : 'text-green-600';
+        colour = money.amount <= 0 ? 'text-red-600' : 'text-green-600';
     }
     return (
         <span className={colour + ' ' + className} {...props}>

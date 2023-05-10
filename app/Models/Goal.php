@@ -27,9 +27,9 @@ class Goal extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function account(): HasOne
+    public function account(): BelongsTo
     {
-        return $this->hasOne(Account::class);
+        return $this->belongsTo(Account::class);
     }
 
     public function autoDeposits(): HasMany
@@ -62,5 +62,10 @@ class Goal extends Model
         }
 
         return GoalStatus::OnTrack;
+    }
+
+    public function completionPercentage(): float
+    {
+        return round($this->current_amount->getAmount() / $this->target_amount->getAmount(), 4) * 100;
     }
 }

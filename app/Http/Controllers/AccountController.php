@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreAccountRequest;
-use App\Http\Requests\UpdateAccountRequest;
 use App\Http\Resources\AccountBalanceResource;
 use App\Http\Resources\AccountResource;
 use App\Models\Account;
@@ -11,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Inertia\Inertia;
 use Inertia\Response;
-use Money\Money;
+use Cknow\Money\Money;
 
 class AccountController extends Controller
 {
@@ -31,7 +29,7 @@ class AccountController extends Controller
         $account = new Account($request->validated());
         $account->user()->associate($request->user());
         $account->balances()->create([
-            'amount' => Money::USD(0),
+            'amount' => Money::USD($request->balance),
         ]);
         $account->save();
 

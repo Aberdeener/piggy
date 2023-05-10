@@ -15,13 +15,24 @@ export interface Goal {
     id: number;
     name: string;
     target_amount: Money;
-    status: 'on_track' | 'off_track' | 'completed';
+    target_date: Date;
+    status: GoalStatus;
+    current_amount: Money;
+    completion_percentage: number;
+    account: Account;
 }
+
+export type GoalStatus = 'on_track' | 'off_track' | 'completed';
 
 export interface Account {
     id: number;
     name: string;
     goals: Goal[];
+    balance: Money;
+}
+
+export interface AccountBalanceHistory {
+    date: Date;
     balance: Money;
 }
 

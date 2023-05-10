@@ -34,11 +34,26 @@ class Account extends Model
         return $this->belongsToMany(GoalAutoDeposit::class, 'goal_auto_deposits');
     }
 
-    public function updateBalance(int $balance): void
+    public function goals(): HasMany
     {
+        return $this->hasMany(Goal::class);
+    }
+
+    public function updateBalance(Money $balance): void
+    {
+        if ($this->latestBalance()->equals($balance)) {
+            return;
+        }
+
+        $difference = $balance->subtract($this->latestBalance());
+
         $this->balances()->create([
-            'balance' => Money::USD($balance),
+            'balance' => $balance,
         ]);
+
+        $this->goals->each(function (Goal $goal) use ($difference) {
+            $goal->incrementCurrentAmount($difference);
+        });
 
         $this->user->updateNetWorth();
     }

@@ -1,14 +1,29 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import {Account, CreditCard, NetWorth, PageProps} from '@/types';
+import {Account, CreditCard, Goal, NetWorth, PageProps} from '@/types';
 import AccountCard from "@/Components/AccountCard";
 import React, {useState} from "react";
 import Modal from "@/Components/Modal";
 import CreditCardCard from "@/Components/CreditCardCard";
 import MoneyDisplay from "@/Components/MoneyDisplay";
+import Chart from "react-apexcharts";
+import GoalCard from "@/Components/GoalCard";
 
-export default function Dashboard({ auth, netWorth, accounts, creditCards }: PageProps<{ netWorth: NetWorth, accounts: Account[], creditCards: CreditCard[] }>) {
+export default function Dashboard({ auth, netWorth, accounts, creditCards, goals }: PageProps<{ netWorth: NetWorth, accounts: Account[], creditCards: CreditCard[], goals: Goal[] }>) {
     const [showNetWorthCalculation, setShowNetWorthCalculation] = useState(false);
+
+    const data = netWorth.history.map(a => {
+        return {
+            name: a.date,
+            amount: a.amount.amount,
+        }
+    });
+
+    const apexCategories = netWorth.history.map(a => a.date);
+    const apexSeries = [{
+        name: 'Net Worth',
+        data: netWorth.history.map(a => a.amount.amount),
+    }];
 
     return (
         <AuthenticatedLayout
@@ -62,15 +77,28 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards }: Pag
                                             </tbody>
                                         </table>
                                     </Modal>
-                                    <ul>
-                                        {netWorth.history.map(a => <li>{a.date.toString()} {a.amount.formatted}</li>)}
-                                    </ul>
+
+                                    <Chart
+                                        options={{
+                                            xaxis: {
+                                                categories: apexCategories,
+                                            }
+                                        }}
+                                        series={apexSeries}
+                                        type="line"
+                                        width="500"
+                                    />
                                 </div>
                             </div>
                         </div>
-                        <div className="p-6 grid gap-4 grid-cols-3">
+                        <div className="p-6 grid gap-4 border-b border-gray-200 grid-cols-3">
                             {accounts.map(a => <AccountCard account={a} />)}
+                        </div>
+                        <div className="p-6 grid gap-4 border-b border-gray-200 grid-cols-2">
                             {creditCards.map(c => <CreditCardCard creditCard={c} />)}
+                        </div>
+                        <div className="p-6 grid gap-4 grid-cols-2">
+                            {goals.map(g => <GoalCard goal={g} />)}
                         </div>
                     </div>
                 </div>

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreAccountBalanceRequest;
 use App\Http\Requests\UpdateAccountBalanceRequest;
 use App\Models\Account;
 use App\Models\AccountBalance;
+use Cknow\Money\Money;
 
 class AccountBalanceController extends Controller
 {
@@ -54,7 +54,7 @@ class AccountBalanceController extends Controller
      */
     public function update(UpdateAccountBalanceRequest $request, Account $account)
     {
-        $account->updateBalance($request->balance);
+        $account->updateBalance(Money::USD($request->balance));
 
         return back();
     }
