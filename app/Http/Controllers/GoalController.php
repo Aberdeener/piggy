@@ -2,49 +2,53 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreGoalRequest;
-use App\Http\Requests\UpdateGoalRequest;
+use App\Http\Resources\GoalResource;
 use App\Models\Goal;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class GoalController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Create the controller instance.
      */
-    public function index(): JsonResponse
+    public function __construct()
     {
-        return response()->json(request()->user()->goals()->get());
+        $this->authorizeResource(Goal::class);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreGoalRequest $request): JsonResponse
+    public function store(StoreGoalRequest $request): JsonResource
     {
         $goal = new Goal($request->validated());
         $goal->user()->associate($request->user());
         $goal->save();
 
-        return response()->json($goal);
+        return new GoalResource($goal);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Goal $goal): JsonResponse
+    public function show(Goal $goal): Response
     {
-        return response()->json($goal);
+        return Inertia::render('Goal', [
+            'goal' => new GoalResource($goal),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateGoalRequest $request, Goal $goal): JsonResponse
+    public function update(UpdateGoalRequest $request, Goal $goal): JsonResource
     {
         $goal->update($request->validated());
 
-        return response()->json($goal);
+        return new GoalResource($goal);
     }
 
     /**

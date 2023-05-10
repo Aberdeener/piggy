@@ -9,11 +9,11 @@ use App\Models\CreditCard;
 class CreditCardController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Create the controller instance.
      */
-    public function index()
+    public function __construct()
     {
-        //
+        $this->authorizeResource(CreditCard::class);
     }
 
     /**

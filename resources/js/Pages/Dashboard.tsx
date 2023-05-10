@@ -82,7 +82,14 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                                         options={{
                                             xaxis: {
                                                 categories: apexCategories,
-                                            }
+                                            },
+                                            yaxis: {
+                                                labels: {
+                                                    formatter: function (value) {
+                                                        return '$' + (value / 100).toFixed(2);
+                                                    }
+                                                },
+                                            },
                                         }}
                                         series={apexSeries}
                                         type="line"

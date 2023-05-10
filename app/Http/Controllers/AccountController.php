@@ -13,6 +13,11 @@ use Cknow\Money\Money;
 
 class AccountController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Account::class);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -41,8 +46,6 @@ class AccountController extends Controller
      */
     public function show(Account $account): Response
     {
-        $this->authorize('view', $account);
-
         return Inertia::render('Account', [
             'account' => new AccountResource($account),
             'accountBalanceHistory' => AccountBalanceResource::collection($account->balances),
@@ -54,8 +57,6 @@ class AccountController extends Controller
      */
     public function update(UpdateAccountRequest $request, Account $account): JsonResource
     {
-        $this->authorize('update', $account);
-
         $account->update($request->validated());
 
         return new AccountResource($account);
@@ -66,8 +67,6 @@ class AccountController extends Controller
      */
     public function destroy(Account $account): JsonResponse
     {
-        $this->authorize('delete', $account);
-
         $account->delete();
 
         return response()->json([

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 
 class GoalAutoDeposit extends Model
 {
@@ -17,17 +18,16 @@ class GoalAutoDeposit extends Model
     protected $casts = [
         'frequency' => GoalAutoDepositFrequency::class,
         'amount' => MoneyIntegerCast::class,
+        'start_date' => 'datetime',
         'last_deposit_date' => 'datetime',
-        'next_deposit_date' => 'datetime',
     ];
 
-    public function __construct(array $attributes = []) {
-        parent::__construct($attributes);
-
-        static::created(static function (GoalAutoDeposit $goalAutoDeposit) {
-            $goalAutoDeposit->calculateNextDepositDate();
-        });
-    }
+    protected $fillable = [
+        'frequency',
+        'amount',
+        'withdraw_account_id',
+        'start_date',
+    ];
 
     public function goal(): BelongsTo
     {
@@ -41,37 +41,35 @@ class GoalAutoDeposit extends Model
 
     public function shouldDeposit(): bool
     {
-        return $this->next_deposit_date->isToday();
+        return $this->nextDepositDate()->isToday();
     }
 
     public function deposit(): void
     {
         $this->goal->incrementCurrentAmount($this->amount);
-        $this->calculateNextDepositDate();
+
+        $this->last_deposit_date = now();
+        $this->save();
     }
 
-    public function calculateNextDepositDate(): void
+    public function nextDepositDate(): Carbon
     {
         if ($this->last_deposit_date === null) {
-            $this->last_deposit_date = now();
+            $this->last_deposit_date = $this->start_date;
         }
 
-        $this->next_deposit_date = match ($this->frequency) {
+        return match ($this->frequency) {
             GoalAutoDepositFrequency::Daily => $this->last_deposit_date->addDay(),
             GoalAutoDepositFrequency::Weekly => $this->last_deposit_date->addWeek(),
             GoalAutoDepositFrequency::Monthly => $this->last_deposit_date->addMonth(),
             GoalAutoDepositFrequency::Yearly => $this->last_deposit_date->addYear(),
         };
-
-        $this->last_deposit_date = now();
-
-        $this->save();
     }
 
     public function determineIterationsUntil(Carbon $targetDate): int
     {
         $iterations = 0;
-        $nextDepositDate = $this->next_deposit_date;
+        $nextDepositDate = $this->nextDepositDate()->startOfDay();
 
         while ($nextDepositDate->lessThan($targetDate)) {
             $iterations++;

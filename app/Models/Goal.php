@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Goal extends Model
@@ -22,9 +23,9 @@ class Goal extends Model
         'target_date' => 'datetime',
     ];
 
-    public function user(): BelongsTo
+    public function user(): HasOneThrough
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOneThrough(User::class, Account::class, 'id', 'id', 'account_id', 'user_id');
     }
 
     public function account(): BelongsTo
@@ -53,11 +54,7 @@ class Goal extends Model
             return GoalStatus::OffTrack;
         }
 
-        // off track if auto deposits are not enough to reach target by target date
-        $autoDepositSum = $this->autoDeposits->reduce(function (Money $sum, GoalAutoDeposit $autoDeposit) {
-            return $autoDeposit->amount->multiply($autoDeposit->determineIterationsUntil($this->target_date));
-        }, Money::USD(0));
-        if ($this->current_amount->add($autoDepositSum)->lessThan($this->target_amount)) {
+        if ($this->projectedTotal()->lessThan($this->target_amount)) {
             return GoalStatus::OffTrack;
         }
 
@@ -66,6 +63,15 @@ class Goal extends Model
 
     public function completionPercentage(): float
     {
-        return round($this->current_amount->getAmount() / $this->target_amount->getAmount(), 4) * 100;
+        return number_format($this->current_amount->getAmount() / $this->target_amount->getAmount() * 100, 2);
+    }
+
+    public function projectedTotal(): Money
+    {
+        $projectedAutoDepositTotal = $this->autoDeposits->reduce(function (Money $sum, GoalAutoDeposit $autoDeposit) {
+            return $sum->add($autoDeposit->amount->multiply($autoDeposit->determineIterationsUntil($this->target_date)));
+        }, Money::USD(0));
+
+        return $this->current_amount->add($projectedAutoDepositTotal);
     }
 }

@@ -24,6 +24,7 @@ class GoalResource extends JsonResource
             'completion_percentage' => $this->completionPercentage(),
             'account' => new AccountResource($this->account),
             'auto_deposits' => GoalAutoDepositResource::collection($this->autoDeposits),
+            'projected_total_by_target_date' => $this->projectedTotal(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

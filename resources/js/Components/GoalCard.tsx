@@ -18,7 +18,7 @@ export default function GoalCard({ goal }: { goal: Goal }) {
                 <p>Target date: {goal.target_date.toString()}</p>
                 <p>Current: <MoneyDisplay money={goal.current_amount} /></p>
                 <p>Status: <GoalStatusBadge status={goal.status} completion_percentage={goal.completion_percentage} /></p>
-                <p>Account: {goal.account.name}</p>
+                <p>Account: <strong>{goal.account.name}</strong></p>
             </div>
         </div>
     );

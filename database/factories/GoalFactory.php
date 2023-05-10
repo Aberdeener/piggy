@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Account;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,7 +18,13 @@ class GoalFactory extends Factory
      */
     public function definition(): array
     {
+        $user = User::factory()->create();
+
         return [
+            'name' => $this->faker->word,
+            'account_id' => Account::factory()->create([
+                'user_id' => $user->id,
+            ])->id,
             'target_amount' => $this->faker->numberBetween(10000, 100000),
             'target_date' => $this->faker->dateTimeBetween('+1 month', '+1 year'),
         ];

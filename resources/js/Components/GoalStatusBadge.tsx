@@ -21,7 +21,7 @@ export default function GoalStatusBadge({ status, completion_percentage }: { sta
 
     return (
         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium ${colour}`}>
-            {statusWord} ({completion_percentage}%)
+            {statusWord} { status !== 'completed' && `(${completion_percentage}%)`}
         </span>
     )
 }
