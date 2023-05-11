@@ -42,7 +42,7 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 bg-white border-b border-gray-200">
                             <div className="ml-4 text-lg leading-7 font-semibold">
-                                Net Worth: <MoneyDisplay money={netWorth.current} className="hover:underline cursor-pointer" onClick={() => setShowNetWorthCalculation(true)} />
+                                Net Worth: <MoneyDisplay money={netWorth.current} className="hover:underline cursor-help" onClick={() => setShowNetWorthCalculation(true)} />
                                 <Modal show={showNetWorthCalculation} onClose={() => setShowNetWorthCalculation(false)}>
                                     <table>
                                         <thead>
