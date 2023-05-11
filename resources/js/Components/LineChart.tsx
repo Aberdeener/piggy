@@ -21,7 +21,7 @@ export default function LineChart({ categories, series, options = {} }: { catego
                     yaxis: {
                         labels: {
                             formatter: function (value) {
-                                return '$' + (value / 100).toFixed(2);
+                                return '$' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                             }
                         },
                     },
