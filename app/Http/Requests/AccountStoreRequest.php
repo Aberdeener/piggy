@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class UpdateAccountBalanceRequest extends FormRequest
+class AccountStoreRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,7 +15,8 @@ class UpdateAccountBalanceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'balance' => ['required', 'numeric'],
+            'name' => ['required', 'string', 'max:255', Rule::unique('accounts')->where('user_id', request()->user()->id)],
+            'balance' => ['required', 'numeric', 'min:0'],
         ];
     }
 }

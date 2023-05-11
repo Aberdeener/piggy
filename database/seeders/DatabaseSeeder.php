@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
     private function createForUser(User $user): void
     {
         $accounts = Account::factory()->count(3)->sequence(
-            ['name' => 'Checking'],
+            ['name' => 'Chequing'],
             ['name' => 'Savings'],
             ['name' => 'Investment'],
         )->create([
@@ -68,7 +68,7 @@ class DatabaseSeeder extends Seeder
             GoalAutoDeposit::factory()->create([
                 'goal_id' => $goal->id,
                 'start_date' => $goal->created_at,
-                'withdraw_account_id' => $accounts->firstWhere('name', 'Checking')->id,
+                'withdraw_account_id' => $accounts->firstWhere('name', 'Chequing')->id,
             ]);
         }
 

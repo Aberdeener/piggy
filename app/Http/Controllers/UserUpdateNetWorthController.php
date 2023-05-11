@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\NetWorth;
+use App\Models\UserNetWorth;
 use Illuminate\Http\Request;
 
 class UserUpdateNetWorthController extends Controller
@@ -16,7 +16,7 @@ class UserUpdateNetWorthController extends Controller
             return;
         }
 
-        $netWorth = new NetWorth();
+        $netWorth = new UserNetWorth();
         $netWorth->user_id = $request->user()->id;
         $netWorth->amount = $currentNetWorth;
         $netWorth->save();

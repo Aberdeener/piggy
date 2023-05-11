@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreAccountRequest;
+use App\Http\Requests\AccountStoreRequest;
 use App\Http\Resources\AccountBalanceResource;
 use App\Http\Resources\AccountResource;
 use App\Models\Account;
@@ -37,7 +37,7 @@ class AccountController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAccountRequest $request): Response
+    public function store(AccountStoreRequest $request): Response
     {
         $account = new Account();
         $account->name = $request->name;

@@ -42,7 +42,7 @@ class User extends Authenticatable
 
     public function netWorths(): HasMany
     {
-        return $this->hasMany(NetWorth::class);
+        return $this->hasMany(UserNetWorth::class);
     }
 
     public function updateNetWorth(): void
@@ -54,7 +54,7 @@ class User extends Authenticatable
             return;
         }
 
-        $netWorth = new NetWorth();
+        $netWorth = new UserNetWorth();
         $netWorth->user_id = $this->id;
         $netWorth->amount = Money::USD($currentNetWorth);
         $netWorth->save();
@@ -76,7 +76,7 @@ class User extends Authenticatable
         return [
             'current' => $this->currentNetWorth(),
             'history' => [
-                ...$this->netWorths()->chunkMap(fn (NetWorth $netWorth) => ['date' => $netWorth->created_at, 'amount' => $netWorth->amount]),
+                ...$this->netWorths()->chunkMap(fn (UserNetWorth $netWorth) => ['date' => $netWorth->created_at, 'amount' => $netWorth->amount]),
             ],
         ];
     }

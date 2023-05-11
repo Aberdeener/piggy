@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\NetWorth;
+use App\Models\UserNetWorth;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class NetWorthFactory extends Factory {
-    protected $model = NetWorth::class;
+    protected $model = UserNetWorth::class;
 
     public function definition(): array {
         return [

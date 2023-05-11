@@ -13,7 +13,10 @@ export default function LineChart({ categories, series, options = {} }: { catego
                                 const date = new Date(value);
                                 return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
                             }
-                        }
+                        },
+                        tooltip: {
+                            enabled: false,
+                        },
                     },
                     yaxis: {
                         labels: {
@@ -22,12 +25,30 @@ export default function LineChart({ categories, series, options = {} }: { catego
                             }
                         },
                     },
+                    chart: {
+                        toolbar: {
+                            show: false,
+                        },
+                        zoom: {
+                            enabled: false,
+                        },
+                    },
+                    colors: ["#838BF1"],
+                    stroke: {
+                        curve: 'smooth',
+                    },
+                    fill: {
+                        type: 'gradient',
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
                 },
                 ...options,
             }}
             series={series}
-            type="line"
-            width="500"
+            type="area"
+            height="350"
         />
     )
 }

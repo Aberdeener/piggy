@@ -25,13 +25,13 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
-                                <NavLink href={route('accounts.index')} active={route().current('accounts.index')}>
+                                <NavLink href={route('accounts.index')} active={route().current()?.includes('accounts.') ?? false}>
                                     Accounts
                                 </NavLink>
-                                <NavLink href={route('credit-cards.index')} active={route().current('credit-cards.index')}>
+                                <NavLink href={route('credit-cards.index')} active={route().current()?.includes('credit-cards.') ?? false}>
                                     Credit Cards
                                 </NavLink>
-                                <NavLink href={route('goals.index')} active={route().current('goals.index')}>
+                                <NavLink href={route('goals.index')} active={route().current()?.includes('goals.') ?? false}>
                                     Goals
                                 </NavLink>
                             </div>
