@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAccountRequest;
 use App\Http\Resources\AccountBalanceResource;
 use App\Http\Resources\AccountResource;
 use App\Models\Account;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -21,24 +22,35 @@ class AccountController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResource
+    public function index(): Response
     {
-        return AccountResource::collection(request()->user()->accounts()->get());
+        return Inertia::render('Accounts/Index', [
+            'accounts' => AccountResource::collection(request()->user()->accounts),
+        ]);
+    }
+
+    public function create(): Response
+    {
+        return Inertia::render('Accounts/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAccountRequest $request): JsonResource
+    public function store(StoreAccountRequest $request): Response
     {
-        $account = new Account($request->validated());
-        $account->user()->associate($request->user());
-        $account->balances()->create([
-            'amount' => Money::USD($request->balance),
-        ]);
+        $account = new Account();
+        $account->name = $request->name;
+        $account->user_id = request()->user()->id;
         $account->save();
 
-        return new AccountResource($account);
+        $account->balances()->create([
+            'balance' => Money::USD($request->balance),
+        ]);
+
+        $account->user->updateNetWorth();
+
+        return $this->index();
     }
 
     /**
@@ -46,7 +58,7 @@ class AccountController extends Controller
      */
     public function show(Account $account): Response
     {
-        return Inertia::render('Account', [
+        return Inertia::render('Accounts/Show', [
             'account' => new AccountResource($account),
             'accountBalanceHistory' => AccountBalanceResource::collection($account->balances),
         ]);
@@ -65,12 +77,16 @@ class AccountController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Account $account): JsonResponse
+    public function destroy(Request $request, Account $account): Response
     {
+        $request->validate([
+            'password' => ['required', 'current_password'],
+        ]);
+
         $account->delete();
 
-        return response()->json([
-            'message' => 'Account deleted successfully',
-        ]);
+        $account->user->updateNetWorth();
+
+        return $this->index();
     }
 }

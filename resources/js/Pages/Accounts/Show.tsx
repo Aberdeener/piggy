@@ -4,8 +4,9 @@ import {Account as AccountType, AccountBalanceHistory, CreditCard, NetWorth, Pag
 import Chart from "react-apexcharts";
 import React from "react";
 import LineChart from "@/Components/LineChart";
+import DeleteAccountButton from "@/Components/DeleteAccountButton";
 
-export default function Account({ auth, account, accountBalanceHistory }: PageProps<{ account: AccountType, accountBalanceHistory: AccountBalanceHistory[] }>) {
+export default function Show({ auth, account, accountBalanceHistory }: PageProps<{ account: AccountType, accountBalanceHistory: AccountBalanceHistory[] }>) {
 
     const data = accountBalanceHistory.map((history) => {
         return {
@@ -35,6 +36,7 @@ export default function Account({ auth, account, accountBalanceHistory }: PagePr
                                 <div className="ml-4 text-lg leading-7 font-semibold">
                                     {JSON.stringify(account)}
                                     <LineChart categories={apexCategories} series={apexSeries} />
+                                    <DeleteAccountButton path={route('accounts.destroy', account.id)} type="account" />
                                 </div>
                             </div>
                         </div>

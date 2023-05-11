@@ -14,6 +14,10 @@ class Account extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = [
+        'name',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -21,12 +25,13 @@ class Account extends Model
 
     public function balances(): HasMany
     {
-        return $this->hasMany(AccountBalance::class);
+        return $this->hasMany(AccountBalance::class)
+            ->orderBy('created_at', 'desc');
     }
 
     public function latestBalance(): Money
     {
-        return $this->balances()->latest()->first()->balance;
+        return $this->balances->first()->balance;
     }
 
     public function autoDeposits(): BelongsToMany

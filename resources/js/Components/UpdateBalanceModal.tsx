@@ -6,9 +6,8 @@ import {useForm} from "@inertiajs/react";
 import {FormEventHandler} from "react";
 import {Money} from "@/types";
 import SecondaryButton from "@/Components/SecondaryButton";
-import DangerButton from "@/Components/DangerButton";
 
-export default function UpdateBalanceModal({ show, setShow, balance, path, id }: { show: boolean, setShow: (show: boolean) => void, balance: Money, path: string, id: number }) {
+export default function UpdateBalanceModal({ show, setShow, balance, path }: { show: boolean, setShow: (show: boolean) => void, balance: Money, path: string }) {
     const { data, setData, patch, isDirty, processing, errors } = useForm({
         balance: balance.amount / 100,
     });
@@ -16,7 +15,9 @@ export default function UpdateBalanceModal({ show, setShow, balance, path, id }:
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        patch(route(path, id));
+        patch(path, {
+            preserveScroll: true,
+        });
 
         setShow(false);
     };

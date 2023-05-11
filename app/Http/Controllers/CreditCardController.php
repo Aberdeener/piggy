@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCreditCardRequest;
-use App\Http\Requests\UpdateCreditCardRequest;
 use App\Http\Resources\CreditCardBalanceResource;
 use App\Http\Resources\CreditCardResource;
 use App\Models\CreditCard;
@@ -18,6 +16,13 @@ class CreditCardController extends Controller
     public function __construct()
     {
         $this->authorizeResource(CreditCard::class);
+    }
+
+    public function index(): Response
+    {
+        return Inertia::render('CreditCards', [
+            'creditCards' => CreditCardResource::collection(request()->user()->creditCards),
+        ]);
     }
 
     /**

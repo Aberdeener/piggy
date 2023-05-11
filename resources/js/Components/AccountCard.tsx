@@ -1,27 +1,11 @@
 import {Account} from "@/types";
 import MoneyDisplay from "@/Components/MoneyDisplay";
-import Modal from "@/Components/Modal";
 import {FormEventHandler, useState} from "react";
-import TextInput from "@/Components/TextInput";
-import InputError from "@/Components/InputError";
-import PrimaryButton from "@/Components/PrimaryButton";
 import {Link, useForm} from "@inertiajs/react";
 import UpdateBalanceModal from "@/Components/UpdateBalanceModal";
 
 export default function AccountCard({ account }: { account: Account }) {
     const [showUpdateBalanceModal, setShowUpdateBalanceModal] = useState(false);
-
-    const { data, setData, patch, processing, errors } = useForm({
-        balance: account.balance.amount,
-    });
-
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
-
-        patch(route('accounts.balance.update', account.id));
-
-        setShowUpdateBalanceModal(false);
-    };
 
     return (
         <div className="max-w p-6 bg-white border border-gray-200 rounded-lg shadow">
@@ -37,28 +21,7 @@ export default function AccountCard({ account }: { account: Account }) {
             </Link>
             <p className="mb-3 font-normal text-gray-500">
                 Balance: <MoneyDisplay className="hover:underline cursor-pointer" money={account.balance} onClick={() => setShowUpdateBalanceModal(true)} />
-                <UpdateBalanceModal show={showUpdateBalanceModal} setShow={setShowUpdateBalanceModal} balance={account.balance} path={'accounts.balance.update'} id={account.id} />
-                <Modal show={showUpdateBalanceModal} onClose={() => setShowUpdateBalanceModal(false)}>
-                    <form onSubmit={submit}>
-                        <TextInput
-                            id="balance"
-                            type="number"
-                            name="balance"
-                            value={data.balance}
-                            className="mt-1 block w-full"
-                            isFocused={true}
-                            onChange={(e) => setData('balance', e.target.value)}
-                        />
-
-                        <InputError message={errors.balance} className="mt-2" />
-
-                        <div className="flex items-center justify-end mt-4">
-                            <PrimaryButton className="ml-4" disabled={processing}>
-                                Update Balance
-                            </PrimaryButton>
-                        </div>
-                    </form>
-                </Modal>
+                <UpdateBalanceModal show={showUpdateBalanceModal} setShow={setShowUpdateBalanceModal} balance={account.balance} path={route('accounts.balance.update', account.id)} />
             </p>
         </div>
     );

@@ -22,7 +22,7 @@ export default function CreditCardCard({ creditCard }: { creditCard: CreditCard 
             </Link>
             <div className="mb-3 font-normal text-gray-500">
                 <p>Balance: <MoneyDisplay className="hover:underline cursor-pointer" money={creditCard.balance} onClick={() => setShowUpdateBalanceModal(true)} creditCard /></p>
-                <UpdateBalanceModal show={showUpdateBalanceModal} setShow={setShowUpdateBalanceModal} balance={creditCard.balance} path={'credit-cards.balance.update'} id={creditCard.id} />
+                <UpdateBalanceModal show={showUpdateBalanceModal} setShow={setShowUpdateBalanceModal} balance={creditCard.balance} path={route('credit-cards.balance.update', creditCard.id)} />
                 <p>Limit: <span>{creditCard.limit.formatted}</span></p>
                 <p>Utilization: <CreditCardUtilizationBadge utilization={creditCard.utilization} utilization_percentage={creditCard.utilization_percentage}/></p>
             </div>
