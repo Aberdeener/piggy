@@ -61,7 +61,7 @@ class Goal extends Model
         return GoalStatus::OnTrack;
     }
 
-    public function completionPercentage(): float
+    public function completionPercentage(): string
     {
         return number_format($this->current_amount->getAmount() / $this->target_amount->getAmount() * 100, 2);
     }

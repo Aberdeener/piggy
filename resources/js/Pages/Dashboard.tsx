@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import {Head, router} from '@inertiajs/react';
 import {Account, CreditCard, Goal, NetWorth, PageProps} from '@/types';
 import AccountCard from "@/Components/AccountCard";
 import React, {useState} from "react";
@@ -8,7 +8,12 @@ import CreditCardCard from "@/Components/CreditCardCard";
 import MoneyDisplay from "@/Components/MoneyDisplay";
 import GoalCard from "@/Components/GoalCard";
 import LineChart from "@/Components/LineChart";
-import {IconChartAreaLine, IconCreditCard, IconMoneybag} from "@tabler/icons-react";
+import {
+    IconCreditCard,
+    IconMoneybag,
+    IconProgress,
+} from "@tabler/icons-react";
+import PrimaryButton from "@/Components/PrimaryButton";
 export default function Dashboard({ auth, netWorth, accounts, creditCards, goals }: PageProps<{ netWorth: NetWorth, accounts: Account[], creditCards: CreditCard[], goals: Goal[] }>) {
     const [showNetWorthCalculation, setShowNetWorthCalculation] = useState(false);
 
@@ -74,9 +79,12 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                             <LineChart categories={apexCategories} series={apexSeries} />
                         </div>
                         <div className="p-6 border-b border-gray-200">
-                            <h2 className="font-semibold text-2xl text-gray-900 inline-flex items-center mb-4">
-                                <IconMoneybag className="w-8 h-8 mr-2" /> Accounts
-                            </h2>
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="font-semibold text-2xl text-gray-900 inline-flex">
+                                    <IconMoneybag className="w-8 h-8 mr-2" /> Accounts
+                                </h2>
+                                <PrimaryButton onClick={() => router.visit(route('accounts.create'))}>Create</PrimaryButton>
+                            </div>
                             <div className="grid gap-4 grid-flow-col">
                                 {accounts.length > 0
                                     ? accounts.map(a => <AccountCard account={a} />)
@@ -85,9 +93,12 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                             </div>
                         </div>
                         <div className="p-6 border-b border-gray-200">
-                            <h2 className="font-semibold text-2xl text-gray-900 inline-flex items-center mb-4">
-                                <IconCreditCard className="w-8 h-8 mr-2" /> Credit Cards
-                            </h2>
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="font-semibold text-2xl text-gray-900 inline-flex">
+                                    <IconCreditCard className="w-8 h-8 mr-2" /> Credit Cards
+                                </h2>
+                                <PrimaryButton onClick={() => router.visit(route('credit-cards.create'))}>Create</PrimaryButton>
+                            </div>
                             <div className="grid gap-4 grid-flow-col">
                                 {creditCards.length > 0
                                     ? creditCards.map(c => <CreditCardCard creditCard={c} />)
@@ -96,9 +107,12 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                             </div>
                         </div>
                         <div className="p-6">
-                            <h2 className="font-semibold text-2xl text-gray-900 inline-flex items-center mb-4">
-                                <IconChartAreaLine className="w-8 h-8 mr-2" /> Goals
-                            </h2>
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="font-semibold text-2xl text-gray-900 inline-flex">
+                                    <IconProgress className="w-8 h-8 mr-2" /> Goals
+                                </h2>
+                                <PrimaryButton onClick={() => router.visit(route('goals.create'))}>Create</PrimaryButton>
+                            </div>
                             <div className="grid gap-4 grid-flow-col">
                                 {goals.length > 0
                                     ? goals.map(g => <GoalCard goal={g} />)

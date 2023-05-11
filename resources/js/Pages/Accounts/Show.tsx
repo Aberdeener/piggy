@@ -32,12 +32,10 @@ export default function Show({ auth, account, accountBalanceHistory }: PageProps
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 bg-white border-b border-gray-200">
-                            <div className="flex items-center">
-                                <div className="ml-4 text-lg leading-7 font-semibold">
-                                    {JSON.stringify(account)}
-                                    <LineChart categories={apexCategories} series={apexSeries} />
-                                    <DeleteAccountButton path={route('accounts.destroy', account.id)} type="account" />
-                                </div>
+                            <div className="ml-4 text-lg leading-7 font-semibold">
+                                {JSON.stringify(account)}
+                                <LineChart categories={apexCategories} series={apexSeries} />
+                                <DeleteAccountButton path={route('accounts.destroy', account.id)} type="account" />
                             </div>
                         </div>
                     </div>
