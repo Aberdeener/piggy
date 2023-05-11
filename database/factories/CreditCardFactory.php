@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,7 +17,10 @@ class CreditCardFactory extends Factory
      */
     public function definition(): array
     {
+        $user = User::factory()->create();
         return [
+            'user_id' => $user->id,
+            'name' => $this->faker->word,
             'limit' => $this->faker->numberBetween(10000, 100000),
         ];
     }

@@ -7,8 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserOwnedObjectPolicy
 {
+    private const BYPASS_METHODS = [
+        // Any user can view the page to make a new object
+        'create',
+    ];
+
     public function __call($name, $arguments)
     {
+        if (in_array($name, self::BYPASS_METHODS, true)) {
+            return true;
+        }
+
         return $this->assert(...$arguments);
     }
 

@@ -2,65 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCreditCardBalanceRequest;
 use App\Http\Requests\UpdateCreditCardBalanceRequest;
-use App\Models\CreditCardBalance;
+use App\Models\CreditCard;
+use Cknow\Money\Money;
 
 class CreditCardBalanceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreCreditCardBalanceRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(CreditCardBalance $creditCardBalance)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(CreditCardBalance $creditCardBalance)
-    {
-        //
+        $this->authorizeResource(CreditCard::class, 'creditCard');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCreditCardBalanceRequest $request, CreditCardBalance $creditCardBalance)
+    public function update(UpdateCreditCardBalanceRequest $request, CreditCard $creditCard)
     {
-        //
-    }
+        $creditCard->updateBalance(Money::USD($request->balance));
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(CreditCardBalance $creditCardBalance)
-    {
-        //
+        return back();
     }
 }

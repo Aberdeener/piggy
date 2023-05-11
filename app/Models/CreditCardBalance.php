@@ -13,4 +13,8 @@ class CreditCardBalance extends Model
     protected $casts = [
         'balance' => MoneyIntegerCast::class,
     ];
+
+    protected $fillable = [
+        'balance',
+    ];
 }

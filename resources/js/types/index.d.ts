@@ -20,9 +20,21 @@ export interface Goal {
     current_amount: Money;
     completion_percentage: number;
     account: Account;
+    auto_deposits: AutoDeposit[];
 }
 
 export type GoalStatus = 'on_track' | 'off_track' | 'completed';
+
+export interface AutoDeposit {
+    id: number;
+    amount: Money;
+    withdraw_account_id: number;
+    frequency: AutoDepositFrequency;
+    next_deposit_date: Date;
+    last_deposit_date: Date;
+}
+
+export type AutoDepositFrequency = 'daily' | 'weekly' | 'biweekly' | 'monthly';
 
 export interface Account {
     id: number;
@@ -43,6 +55,11 @@ export interface CreditCard {
     limit: Money;
     utilization: CreditCardUtilization;
     utilization_percentage: number;
+}
+
+export interface CreditCardBalanceHistory {
+    date: Date;
+    balance: Money;
 }
 
 export type CreditCardUtilization = 'low' | 'medium' | 'high' | 'over_limit';

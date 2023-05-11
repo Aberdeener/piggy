@@ -28,7 +28,6 @@ class HandleGoalAutoDeposits implements ShouldQueue
      */
     public function handle(): void
     {
-        echo 'Handling goal auto deposits...';
         Goal::query()->chunk(100, static function (Goal $goal) {
             $goal->autoDeposits->each(static function (GoalAutoDeposit $autoDeposit) {
                 if ($autoDeposit->shouldDeposit()) {

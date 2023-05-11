@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('accounts', \App\Http\Controllers\AccountController::class);
     Route::patch('/accounts/{account}/balance', [\App\Http\Controllers\AccountBalanceController::class, 'update'])->name('accounts.balance.update');
     Route::resource('credit-cards', \App\Http\Controllers\CreditCardController::class);
+    Route::patch('/credit-cards/{creditCard}/balance', [\App\Http\Controllers\CreditCardBalanceController::class, 'update'])->name('credit-cards.balance.update');
     Route::resource('goals', \App\Http\Controllers\GoalController::class);
 });
 

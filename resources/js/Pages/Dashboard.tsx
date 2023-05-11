@@ -6,9 +6,8 @@ import React, {useState} from "react";
 import Modal from "@/Components/Modal";
 import CreditCardCard from "@/Components/CreditCardCard";
 import MoneyDisplay from "@/Components/MoneyDisplay";
-import Chart from "react-apexcharts";
 import GoalCard from "@/Components/GoalCard";
-
+import LineChart from "@/Components/LineChart";
 export default function Dashboard({ auth, netWorth, accounts, creditCards, goals }: PageProps<{ netWorth: NetWorth, accounts: Account[], creditCards: CreditCard[], goals: Goal[] }>) {
     const [showNetWorthCalculation, setShowNetWorthCalculation] = useState(false);
 
@@ -40,61 +39,39 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                                 <div className="ml-4 text-lg leading-7 font-semibold">
                                     Net Worth <MoneyDisplay money={netWorth.current} className="hover:underline cursor-pointer" onClick={() => setShowNetWorthCalculation(true)} />
                                     <Modal show={showNetWorthCalculation} onClose={() => setShowNetWorthCalculation(false)}>
-                                        <table className={"border-x border-b w-full"}>
+                                        <table>
                                             <thead>
-                                            <tr>
-                                                <th>Account</th>
-                                                <th>Balance</th>
-                                            </tr>
+                                                <tr>
+                                                    <th>Account</th>
+                                                    <th>Balance</th>
+                                                </tr>
                                             </thead>
                                             <tbody>
-                                            {accounts.map(a => {
-                                                return (
-                                                    <tr>
-                                                        <td>{a.name}</td>
-                                                        <td><MoneyDisplay money={a.balance}/></td>
-                                                    </tr>
-                                                )
-                                            })}
-                                            </tbody>
-                                        </table>
-                                        <table className={"border-x border-b w-full"}>
-                                            <thead>
-                                            <tr>
-                                                <th>Credit Card</th>
-                                                <th>Balance</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {creditCards.map(c => {
-                                                return (
-                                                    <tr>
-                                                        <td>{c.name}</td>
-                                                        <td><MoneyDisplay money={c.balance} creditCard /></td>
-                                                    </tr>
-                                                )
-                                            })}
+                                                {accounts.map(a => {
+                                                    return (
+                                                        <tr>
+                                                            <td>{a.name}</td>
+                                                            <td><MoneyDisplay money={a.balance}/></td>
+                                                        </tr>
+                                                    )
+                                                })}
+                                                <tr>
+                                                    <th>Credit Card</th>
+                                                    <th>Balance</th>
+                                                </tr>
+                                                {creditCards.map(c => {
+                                                    return (
+                                                        <tr>
+                                                            <td>{c.name}</td>
+                                                            <td><MoneyDisplay money={c.balance} creditCard /></td>
+                                                        </tr>
+                                                    )
+                                                })}
                                             </tbody>
                                         </table>
                                     </Modal>
 
-                                    <Chart
-                                        options={{
-                                            xaxis: {
-                                                categories: apexCategories,
-                                            },
-                                            yaxis: {
-                                                labels: {
-                                                    formatter: function (value) {
-                                                        return '$' + (value / 100).toFixed(2);
-                                                    }
-                                                },
-                                            },
-                                        }}
-                                        series={apexSeries}
-                                        type="line"
-                                        width="500"
-                                    />
+                                    <LineChart categories={apexCategories} series={apexSeries} />
                                 </div>
                             </div>
                         </div>

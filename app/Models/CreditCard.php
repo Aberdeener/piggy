@@ -52,6 +52,19 @@ class CreditCard extends Model
 
     public function utilizationPercentage(): float
     {
-        return round($this->latestBalance()->getAmount() / $this->limit->getAmount(), 4) * 100;
+        return number_format($this->latestBalance()->getAmount() / $this->limit->getAmount() * 100, 2);
+    }
+
+    public function updateBalance(Money $balance): void
+    {
+        if ($this->latestBalance()->equals($balance)) {
+            return;
+        }
+
+        $this->balances()->create([
+            'balance' => $balance,
+        ]);
+
+        $this->user->updateNetWorth();
     }
 }

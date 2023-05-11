@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCreditCardRequest;
 use App\Http\Requests\UpdateCreditCardRequest;
+use App\Http\Resources\CreditCardBalanceResource;
+use App\Http\Resources\CreditCardResource;
 use App\Models\CreditCard;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CreditCardController extends Controller
 {
@@ -35,9 +39,12 @@ class CreditCardController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(CreditCard $creditCard)
+    public function show(CreditCard $creditCard): Response
     {
-        //
+        return Inertia::render('CreditCard', [
+            'creditCard' => new CreditCardResource($creditCard),
+            'creditCardBalanceHistory' => CreditCardBalanceResource::collection($creditCard->balances),
+        ]);
     }
 
     /**
