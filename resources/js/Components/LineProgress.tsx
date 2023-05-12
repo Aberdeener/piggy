@@ -32,7 +32,10 @@ export default function LineProgress({ status, percentage }: { status: GoalStatu
 
     return (
         <div className="w-full bg-gray-200 rounded-full h-2.5">
-            <div className={`${barColour(status)} h-2.5 rounded-full`} style={{"width": `${barPercentage(percentage)}%`}}></div>
+            <div className={`${barColour(status)} h-2.5 rounded-full`} style={{
+                "width": `${barPercentage(percentage)}%`,
+                "transition": "width 0.3s, background-color 0.1s",
+            }}/>
         </div>
     )
 }
