@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('goal_auto_deposits', function (Blueprint $table) {
             $table->id();
             $table->foreignId('goal_id')->constrained();
-            $table->foreignId('withdraw_account_id')->constrained('accounts');
+            $table->foreignId('withdraw_account_id')->constrained('accounts')->cascadeOnDelete();
             $table->integer('amount');
             $table->enum('frequency', ['daily', 'weekly', 'monthly', 'yearly']);
             $table->date('start_date');

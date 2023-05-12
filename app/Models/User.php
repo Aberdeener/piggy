@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -28,18 +27,21 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function accounts(): HasMany
     {
-        return $this->hasMany(Account::class);
+        return $this->hasMany(Account::class)
+            ->orderBy('created_at', 'desc');
     }
 
     public function creditCards(): HasMany
     {
-        return $this->hasMany(CreditCard::class);
+        return $this->hasMany(CreditCard::class)
+            ->orderBy('created_at', 'desc');
     }
 
     // TODO: should goals just have a user_id column?
     public function goals(): HasManyThrough
     {
-        return $this->hasManyThrough(Goal::class, Account::class);
+        return $this->hasManyThrough(Goal::class, Account::class)
+            ->orderBy('created_at', 'desc');
     }
 
     public function netWorths(): HasMany

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreGoalRequest;
 use App\Http\Resources\GoalResource;
 use App\Models\Goal;
+use Cknow\Money\Money;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Inertia\Inertia;
@@ -27,7 +28,7 @@ class GoalController extends Controller
     {
         $goal = new Goal($request->validated());
         if ($request->use_account_balance_to_start) {
-            $goal->current_amount = $goal->account->balance;
+            $goal->current_amount = $goal->account->latestBalance();
         }
 
         $goal->save();

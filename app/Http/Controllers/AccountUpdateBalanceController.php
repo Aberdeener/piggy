@@ -13,6 +13,7 @@ class AccountUpdateBalanceController extends Controller
         $this->authorizeResource(Account::class);
     }
 
+    // TODO: add ability to add x number of dollars to balance rather than doing math myself
     public function __invoke(UpdateAccountBalanceRequest $request, Account $account)
     {
         $account->updateBalance(Money::USD($request->balance));

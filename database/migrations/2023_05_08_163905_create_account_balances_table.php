@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('account_balances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('account_id')->constrained();
+            $table->foreignId('account_id')->constrained()->cascadeOnDelete();
             $table->integer('balance');
             $table->timestamps();
         });

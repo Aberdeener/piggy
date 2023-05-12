@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('credit_card_balances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('credit_card_id')->constrained();
+            $table->foreignId('credit_card_id')->constrained()->cascadeOnDelete();
             $table->integer('balance');
             $table->timestamps();
         });

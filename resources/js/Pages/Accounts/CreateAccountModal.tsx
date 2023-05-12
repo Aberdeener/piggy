@@ -14,18 +14,15 @@ export default function CreateAccountModal({ show, onClose }: { show: boolean, o
         balance: 0,
     });
 
-    useEffect(() => {
-        return () => {
-            reset('name');
-        };
-    }, []);
-
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
         post(route('accounts.store'), {
             preserveScroll: true,
-            onFinish: onClose,
+            onSuccess: () => {
+                onClose()
+                reset()
+            },
         });
     };
 
@@ -36,12 +33,12 @@ export default function CreateAccountModal({ show, onClose }: { show: boolean, o
 
                 <TextInput
                     id="name"
+                    placeholder="Account name"
                     className="mt-1 block w-full"
                     value={data.name}
                     onChange={(e) => setData('name', e.target.value)}
                     required
                     isFocused
-                    autoComplete="name"
                 />
 
                 <InputError className="mt-2" message={errors.name} />
