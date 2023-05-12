@@ -28,6 +28,7 @@
         "@heroicons/react": "^2.0.18",
         "@tabler/icons-react": "^2.18.0",
         "apexcharts": "^3.40.0",
-        "react-apexcharts": "^1.4.0"
+        "react-apexcharts": "^1.4.0",
+        "react-tailwindcss-datepicker": "^1.6.1"
     }
 }
