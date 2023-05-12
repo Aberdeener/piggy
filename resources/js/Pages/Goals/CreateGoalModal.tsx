@@ -7,11 +7,13 @@ import InputError from "@/Components/InputError";
 import Modal from "@/Components/Modal";
 import SecondaryButton from "@/Components/SecondaryButton";
 import Datepicker from "react-tailwindcss-datepicker";
+import MoneyInput from "@/Components/MoneyInput";
 
 export default function CreateGoalModal({ show, onClose }: { show: boolean, onClose: () => void }) {
     const { data, setData, post, processing, errors, reset, isDirty } = useForm({
         name: '',
-        balance: '',
+        target_date: new Date(),
+        target_amount: 0,
     });
 
     useEffect(() => {
@@ -29,16 +31,6 @@ export default function CreateGoalModal({ show, onClose }: { show: boolean, onCl
         });
     };
 
-    const [value, setValue] = useState({
-        startDate: new Date(),
-        endDate: new Date().setMonth(11)
-    });
-
-    const handleValueChange = (newValue) => {
-        console.log("newValue:", newValue);
-        setValue(newValue);
-    }
-
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
 
@@ -46,7 +38,6 @@ export default function CreateGoalModal({ show, onClose }: { show: boolean, onCl
         <Modal show={show} onClose={onClose}>
             <form onSubmit={submit} className="m-4">
                 <InputLabel htmlFor="name" value="Name" />
-
                 <TextInput
                     id="name"
                     className="mt-1 block w-full"
@@ -56,22 +47,25 @@ export default function CreateGoalModal({ show, onClose }: { show: boolean, onCl
                     isFocused
                     autoComplete="name"
                 />
-
                 <InputError className="mt-2" message={errors.name} />
 
-                <InputLabel htmlFor="target_date" value="Target Date" className="mt-2" />
+                <InputLabel htmlFor="target_amount" value="Target amount" className="mt-2" />
+                <MoneyInput value={data.target_amount} setData={setData} id="target_amount" />
+                <InputError className="mt-2" message={errors.target_amount} />
 
+                <InputLabel htmlFor="target_date" value="Target Date" className="mt-2" />
                 <Datepicker
-                    value={value}
+                    value={data.target_date}
                     inputId="target_date"
                     inputName="target_date"
-                    onChange={handleValueChange}
+                    onChange={(e) => setData('target_date', e.startDate.toString())}
                     startFrom={yesterday}
                     minDate={yesterday}
                     asSingle
                     useRange={false}
                     containerClassName={"mt-1 relative"}
                 />
+                <InputError className="mt-2" message={errors.target_date} />
 
                 <div className="mt-6 flex justify-end">
                     <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
