@@ -6,6 +6,7 @@ namespace App\Providers;
 use App\Models\Account;
 use App\Models\CreditCard;
 use App\Models\Goal;
+use App\Models\GoalAutoDeposit;
 use App\Policies\UserOwnedObjectPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -20,6 +21,7 @@ class AuthServiceProvider extends ServiceProvider
         Account::class => UserOwnedObjectPolicy::class,
         CreditCard::class => UserOwnedObjectPolicy::class,
         Goal::class => UserOwnedObjectPolicy::class,
+        GoalAutoDeposit::class => UserOwnedObjectPolicy::class,
     ];
 
     /**

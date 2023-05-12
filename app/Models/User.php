@@ -70,14 +70,4 @@ class User extends Authenticatable
             return $owing->add($creditCard->latestBalance());
         }, Money::USD(0)));
     }
-
-    public function netWorth(): array
-    {
-        return [
-            'current' => $this->currentNetWorth(),
-            'history' => [
-                ...$this->netWorths()->chunkMap(fn (UserNetWorth $netWorth) => ['date' => $netWorth->created_at, 'amount' => $netWorth->amount]),
-            ],
-        ];
-    }
 }

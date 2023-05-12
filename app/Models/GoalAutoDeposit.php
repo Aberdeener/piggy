@@ -20,6 +20,7 @@ class GoalAutoDeposit extends Model
         'amount' => MoneyIntegerCast::class,
         'start_date' => 'datetime',
         'last_deposit_date' => 'datetime',
+        'enabled' => 'boolean',
     ];
 
     protected $fillable = [
@@ -27,6 +28,7 @@ class GoalAutoDeposit extends Model
         'amount',
         'withdraw_account_id',
         'start_date',
+        'enabled',
     ];
 
     public function goal(): BelongsTo

@@ -48,6 +48,7 @@ class GoalTest extends TestCase
                 'user_id' => $goal->user->id,
             ])->id,
             'start_date' => now(),
+            'enabled' => true,
         ]);
 
         $this->assertEquals(GoalStatus::OffTrack, $goal->status());
@@ -68,6 +69,7 @@ class GoalTest extends TestCase
                 'user_id' => $goal->user->id,
             ])->id,
             'start_date' => now(),
+            'enabled' => true,
         ]);
 
         $this->assertEquals(GoalStatus::OnTrack, $goal->status());
@@ -99,10 +101,32 @@ class GoalTest extends TestCase
                 'user_id' => $goal->user->id,
             ])->id,
             'start_date' => now(),
+            'enabled' => true,
         ]);
 
         // 30 days * $5 = $150 + $5 = $155
         $this->assertEquals(Money::USD(155_00), $goal->projectedTotal());
+    }
+
+    public function test_projected_total_when_has_disabled_autodeposits(): void
+    {
+        $goal = Goal::factory()->create([
+            'target_amount' => Money::USD(10_00),
+            'current_amount' => Money::USD(5_00),
+            'target_date' => now()->addDays(30),
+        ]);
+
+        $goal->autoDeposits()->create([
+            'frequency' => GoalAutoDepositFrequency::Daily,
+            'amount' => Money::USD(5_00),
+            'withdraw_account_id' => Account::factory()->create([
+                'user_id' => $goal->user->id,
+            ])->id,
+            'start_date' => now(),
+            'enabled' => false,
+        ]);
+
+        $this->assertEquals(Money::USD(5_00), $goal->projectedTotal());
     }
 
     public function test_completion_percentage(): void

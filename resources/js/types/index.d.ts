@@ -21,7 +21,9 @@ export interface Goal {
     completion_percentage: number;
     account: Account;
     auto_deposits: AutoDeposit[];
+    projected_status: GoalStatus;
     projected_total_by_target_date: Money;
+    projected_completion_percentage: number;
 }
 
 export type GoalStatus = 'on_track' | 'off_track' | 'completed';
@@ -33,6 +35,7 @@ export interface AutoDeposit {
     frequency: AutoDepositFrequency;
     next_deposit_date: string;
     last_deposit_date: string;
+    enabled: boolean;
 }
 
 export type AutoDepositFrequency = 'daily' | 'weekly' | 'biweekly' | 'monthly';

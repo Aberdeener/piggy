@@ -26,6 +26,7 @@ class GoalAutoDepositFactory extends Factory
             'withdraw_account_id' => Account::factory()->create([
                 'user_id' => $goal->user->id,
             ])->id,
+            'enabled' => true,
             'amount' => $this->faker->numberBetween(1000, 100000),
             'start_date' => $this->faker->dateTimeBetween('+1 month', '+1 year'),
             'frequency' => strtolower($this->faker->randomElement(GoalAutoDepositFrequency::cases())->name),

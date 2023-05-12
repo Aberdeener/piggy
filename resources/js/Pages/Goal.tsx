@@ -1,34 +1,30 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-import React from "react";
-import {PageProps, Goal as GoalType} from "@/types";
+import {Head, router, useForm} from '@inertiajs/react';
+import React, {useState} from "react";
+import {PageProps, Goal as GoalType, GoalStatus} from "@/types";
 import SecondaryButton from "@/Components/SecondaryButton";
 import {IconPencil, IconProgress} from "@tabler/icons-react";
 import GoalStatusBadge from "@/Components/GoalStatusBadge";
 import Modal from "@/Components/Modal";
+import MoneyDisplay from "@/Components/MoneyDisplay";
+import PrimaryButton from "@/Components/PrimaryButton";
+import LineProgress from "@/Components/LineProgress";
 
 export default function Goal({ auth, goal }: PageProps<{ goal: GoalType }>) {
 
-    let barColour;
-    switch (goal.status) {
-        case 'completed':
-            barColour = 'bg-green-500';
-            break;
-        case 'on_track':
-            barColour = 'bg-yellow-500';
-            break;
-        case 'off_track':
-            barColour = 'bg-red-500';
-            break;
+    const { patch } = useForm();
+
+    const toggleDepositEnabled = (id: number) => {
+        patch(route('goal-auto-deposits.toggle', id), {
+            preserveScroll: true,
+        });
     }
 
-    let barPercentage;
-    if (goal.completion_percentage < 0) {
-        barPercentage = 0;
-    } else if (goal.completion_percentage > 100) {
-        barPercentage = 100;
-    } else {
-        barPercentage = goal.completion_percentage;
+    const [showDepositEditModal, setShowDepositEditModal] = useState(false);
+    const [currentDepositEditModalId, setCurrentDepositEditModalId] = useState(0);
+    const showDepositEditModalForId = (id: number) => {
+        setCurrentDepositEditModalId(id);
+        setShowDepositEditModal(true);
     }
 
     return (
@@ -47,22 +43,28 @@ export default function Goal({ auth, goal }: PageProps<{ goal: GoalType }>) {
                             </h2>
 
                             <p>Target amount: {goal.target_amount.formatted}</p>
-                            <p>Current amount: {goal.current_amount.formatted}</p>
                             <p>Target date: {goal.target_date}</p>
                             <p>Linked account: {goal.account.name}</p>
-                            <p>Projected total: {goal.projected_total_by_target_date.formatted}</p>
 
-                            <div className="w-full bg-gray-200 rounded-full h-2.5">
-                                <div className={`${barColour} h-2.5 rounded-full mt-4`} style={{"width": `${barPercentage}%`}}></div>
-                            </div>
+                            <h2 className="font-semibold text-xl text-gray-900 inline-flex mt-2">
+                                Current progress
+                            </h2>
+                            <p>Current amount: <MoneyDisplay money={goal.current_amount} /></p>
+                            <LineProgress status={goal.status} percentage={goal.completion_percentage} />
 
-                            <table className="w-full text-sm text-left text-gray-500">
-                                <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-white">
+                            <h2 className="font-semibold text-xl text-gray-900 inline-flex">
+                                Projected progress
+                            </h2>
+                            <p>Projected total: <MoneyDisplay money={goal.projected_total_by_target_date} /></p>
+                            <LineProgress status={goal.projected_status} percentage={goal.projected_completion_percentage} />
+
+                            <div className="flex justify-between items-center pt-2 pb-1">
+                                <h2 className="font-semibold text-xl text-gray-900 inline-flex">
                                     Auto deposits
-                                    <p className="mt-1 text-sm font-normal text-gray-500">
-                                        Automatically deposit money into this goal from your accounts.
-                                    </p>
-                                </caption>
+                                </h2>
+                                <PrimaryButton onClick={() => router.visit(route('goals.create'))}>Create</PrimaryButton>
+                            </div>
+                            <table className="w-full text-sm text-left text-gray-500">
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
                                     <th scope="col" className="px-6 py-3">
@@ -103,12 +105,12 @@ export default function Goal({ auth, goal }: PageProps<{ goal: GoalType }>) {
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <label className="relative inline-flex items-center cursor-pointer">
-                                                        <input type="checkbox" value="" className="sr-only peer"/>
-                                                        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                                        <input type="checkbox" className="sr-only peer" defaultChecked={deposit.enabled} onChange={() => toggleDepositEnabled(deposit.id)} />
+                                                        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#838BF1]"></div>
                                                     </label>
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <SecondaryButton onClick={() => showDepositEditModal(deposit.id)}>
+                                                    <SecondaryButton onClick={() => showDepositEditModalForId(deposit.id)}>
                                                         <IconPencil className="h-4 w-4" />
                                                     </SecondaryButton>
                                                 </td>
@@ -117,6 +119,9 @@ export default function Goal({ auth, goal }: PageProps<{ goal: GoalType }>) {
                                     })}
                                 </tbody>
                             </table>
+                            <Modal show={showDepositEditModal} onClose={() => setShowDepositEditModal(false)}>
+                                {currentDepositEditModalId}
+                            </Modal>
                         </div>
                     </div>
                 </div>

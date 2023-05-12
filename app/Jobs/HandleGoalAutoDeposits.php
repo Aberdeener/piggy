@@ -30,7 +30,7 @@ class HandleGoalAutoDeposits implements ShouldQueue
     {
         Goal::query()->chunk(100, static function (Goal $goal) {
             $goal->autoDeposits->each(static function (GoalAutoDeposit $autoDeposit) {
-                if ($autoDeposit->shouldDeposit()) {
+                if ($autoDeposit->enabled && $autoDeposit->shouldDeposit()) {
                     $autoDeposit->deposit();
                 }
             });

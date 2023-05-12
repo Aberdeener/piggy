@@ -66,12 +66,36 @@ class Goal extends Model
         return number_format($this->current_amount->getAmount() / $this->target_amount->getAmount() * 100, 2);
     }
 
+    public function projectedStatus(): GoalStatus
+    {
+        if ($this->projectedTotal()->greaterThanOrEqual($this->target_amount)) {
+            return GoalStatus::Completed;
+        }
+
+        if ($this->target_date->lessThan(now())) {
+            return GoalStatus::OffTrack;
+        }
+
+        if ($this->projectedTotal()->lessThan($this->target_amount)) {
+            return GoalStatus::OffTrack;
+        }
+
+        return GoalStatus::OnTrack;
+    }
+
     public function projectedTotal(): Money
     {
-        $projectedAutoDepositTotal = $this->autoDeposits->reduce(function (Money $sum, GoalAutoDeposit $autoDeposit) {
+        $projectedAutoDepositTotal = $this->autoDeposits->filter(function (GoalAutoDeposit $autoDeposit) {
+            return $autoDeposit->enabled;
+        })->reduce(function (Money $sum, GoalAutoDeposit $autoDeposit) {
             return $sum->add($autoDeposit->amount->multiply($autoDeposit->determineIterationsUntil($this->target_date)));
         }, Money::USD(0));
 
         return $this->current_amount->add($projectedAutoDepositTotal);
+    }
+
+    public function projectedCompletionPercentage(): string
+    {
+        return number_format($this->projectedTotal()->getAmount() / $this->target_amount->getAmount() * 100, 2);
     }
 }

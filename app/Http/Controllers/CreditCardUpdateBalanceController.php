@@ -6,17 +6,14 @@ use App\Http\Requests\CreditCardBalanceUpdateRequest;
 use App\Models\CreditCard;
 use Cknow\Money\Money;
 
-class CreditCardBalanceController extends Controller
+class CreditCardUpdateBalanceController extends Controller
 {
     public function __construct()
     {
-        $this->authorizeResource(CreditCard::class, 'creditCard');
+        $this->authorizeResource(CreditCard::class);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(CreditCardBalanceUpdateRequest $request, CreditCard $creditCard)
+    public function __invoke(CreditCardBalanceUpdateRequest $request, CreditCard $creditCard)
     {
         $creditCard->updateBalance(Money::USD($request->balance));
 

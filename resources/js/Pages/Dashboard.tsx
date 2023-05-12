@@ -14,6 +14,7 @@ import {
     IconProgress,
 } from "@tabler/icons-react";
 import PrimaryButton from "@/Components/PrimaryButton";
+
 export default function Dashboard({ auth, netWorth, accounts, creditCards, goals }: PageProps<{ netWorth: NetWorth, accounts: Account[], creditCards: CreditCard[], goals: Goal[] }>) {
     const [showNetWorthCalculation, setShowNetWorthCalculation] = useState(false);
 

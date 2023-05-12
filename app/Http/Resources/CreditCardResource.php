@@ -21,8 +21,6 @@ class CreditCardResource extends JsonResource
             'limit' => $this->limit,
             'utilization' => $this->utilization(),
             'utilization_percentage' => $this->utilizationPercentage(),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
         ];
     }
 }

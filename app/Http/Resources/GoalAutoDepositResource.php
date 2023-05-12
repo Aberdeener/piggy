@@ -21,8 +21,7 @@ class GoalAutoDepositResource extends JsonResource
             'frequency' => $this->frequency,
             'last_deposit_date' => $this->last_deposit_date,
             'next_deposit_date' => $this->nextDepositDate(),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'enabled' => $this->enabled,
         ];
     }
 }

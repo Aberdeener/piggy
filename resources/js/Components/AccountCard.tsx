@@ -16,7 +16,7 @@ export default function AccountCard({ account }: { account: Account }) {
             </Link>
             <p className="font-normal text-gray-500">
                 Balance: <MoneyDisplay className="hover:underline cursor-pointer" money={account.balance} onClick={() => setShowUpdateBalanceModal(true)} />
-                <UpdateBalanceModal show={showUpdateBalanceModal} setShow={setShowUpdateBalanceModal} balance={account.balance} path={route('accounts.balance.update', account.id)} />
+                <UpdateBalanceModal show={showUpdateBalanceModal} setShow={setShowUpdateBalanceModal} balance={account.balance} path={route('accounts.update-balance', account.id)} />
             </p>
         </div>
     );
