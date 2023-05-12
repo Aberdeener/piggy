@@ -25,13 +25,12 @@ class Account extends Model
 
     public function balances(): HasMany
     {
-        return $this->hasMany(AccountBalance::class)
-            ->orderBy('created_at', 'desc');
+        return $this->hasMany(AccountBalance::class);
     }
 
     public function latestBalance(): Money
     {
-        return $this->balances->first()->balance;
+        return $this->balances()->latest()->first()->balance;
     }
 
     public function autoDeposits(): BelongsToMany
