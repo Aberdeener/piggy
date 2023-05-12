@@ -1,6 +1,6 @@
 import {GoalStatus} from "@/types";
 
-export default function GoalStatusBadge({ status, completion_percentage }: { status: GoalStatus, completion_percentage: number }) {
+export default function GoalStatusBadge({ status, completion_percentage, className = '' }: { status: GoalStatus, completion_percentage: number, className?: string }) {
     let colour = null;
     let statusWord = null;
 
@@ -20,7 +20,7 @@ export default function GoalStatusBadge({ status, completion_percentage }: { sta
     }
 
     return (
-        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium ${colour}`}>
+        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium ${colour} ${className}`}>
             {statusWord} { status !== 'completed' && `(${completion_percentage}%)`}
         </span>
     )

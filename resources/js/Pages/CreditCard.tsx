@@ -9,7 +9,7 @@ import {
     PageProps
 } from '@/types';
 import React from "react";
-import LineChart from "@/Components/LineChart";
+import BalanceLineChart from "@/Components/BalanceLineChart";
 
 export default function Account({ auth, creditCard, creditCardBalanceHistory }: PageProps<{ creditCard: CreditCard, creditCardBalanceHistory: CreditCardBalanceHistory[] }>) {
 
@@ -32,7 +32,7 @@ export default function Account({ auth, creditCard, creditCardBalanceHistory }: 
                         <div className="p-6 bg-white border-b border-gray-200">
                             <div className="ml-4 text-lg leading-7 font-semibold">
                                 {JSON.stringify(creditCard)}
-                                <LineChart categories={apexCategories} series={apexSeries} />
+                                <BalanceLineChart categories={apexCategories} series={apexSeries} />
                             </div>
                         </div>
                     </div>

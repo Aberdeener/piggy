@@ -21,6 +21,7 @@ export interface Goal {
     completion_percentage: number;
     account: Account;
     auto_deposits: AutoDeposit[];
+    projected_total_by_target_date: Money;
 }
 
 export type GoalStatus = 'on_track' | 'off_track' | 'completed';

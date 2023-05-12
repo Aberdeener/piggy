@@ -1,7 +1,7 @@
 import {Account, PageProps} from "@/types";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import {Head, Link, router} from "@inertiajs/react";
-import LineChart from "@/Components/LineChart";
+import BalanceLineChart from "@/Components/BalanceLineChart";
 import React from "react";
 import MoneyDisplay from "@/Components/MoneyDisplay";
 import PrimaryButton from "@/Components/PrimaryButton";

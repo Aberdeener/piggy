@@ -1,7 +1,7 @@
 import Chart from "react-apexcharts";
 import React from "react";
 
-export default function LineChart({ categories, series, options = {} }: { categories: any[], series: { name: string, data: number[] }[], options?: any }) {
+export default function BalanceLineChart({ categories, series, options = {} }: { categories: any[], series: { name: string, data: number[] }[], options?: any }) {
     return (
         <Chart
             options={{
@@ -21,7 +21,7 @@ export default function LineChart({ categories, series, options = {} }: { catego
                     yaxis: {
                         labels: {
                             formatter: function (value) {
-                                return '$' + (value / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                return '$' + (value / 100).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                             }
                         },
                     },

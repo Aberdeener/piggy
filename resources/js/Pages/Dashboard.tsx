@@ -7,7 +7,7 @@ import Modal from "@/Components/Modal";
 import CreditCardCard from "@/Components/CreditCardCard";
 import MoneyDisplay from "@/Components/MoneyDisplay";
 import GoalCard from "@/Components/GoalCard";
-import LineChart from "@/Components/LineChart";
+import BalanceLineChart from "@/Components/BalanceLineChart";
 import {
     IconCreditCard,
     IconMoneybag,
@@ -76,7 +76,7 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                                     </table>
                                 </Modal>
                             </div>
-                            <LineChart categories={apexCategories} series={apexSeries} />
+                            <BalanceLineChart categories={apexCategories} series={apexSeries} />
                         </div>
                         <div className="p-6 border-b border-gray-200">
                             <div className="flex justify-between items-center mb-4">
