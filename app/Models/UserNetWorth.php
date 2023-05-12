@@ -15,6 +15,10 @@ class UserNetWorth extends Model
         'amount' => MoneyIntegerCast::class,
     ];
 
+    protected $fillable = [
+        'amount',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -35,6 +35,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(CreditCard::class);
     }
 
+    // TODO: should goals just have a user_id column?
     public function goals(): HasManyThrough
     {
         return $this->hasManyThrough(Goal::class, Account::class);
@@ -54,10 +55,9 @@ class User extends Authenticatable implements MustVerifyEmail
             return;
         }
 
-        $netWorth = new UserNetWorth();
-        $netWorth->user_id = $this->id;
-        $netWorth->amount = Money::USD($currentNetWorth);
-        $netWorth->save();
+        $this->netWorths()->create([
+            'amount' => Money::USD($currentNetWorth),
+        ]);
     }
 
     public function currentNetWorth(): Money

@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import {Head, router, useForm} from '@inertiajs/react';
+import {Head, Link, router, useForm} from '@inertiajs/react';
 import React, {useState} from "react";
 import {PageProps, Goal as GoalType, GoalStatus} from "@/types";
 import SecondaryButton from "@/Components/SecondaryButton";
@@ -9,7 +9,6 @@ import Modal from "@/Components/Modal";
 import MoneyDisplay from "@/Components/MoneyDisplay";
 import PrimaryButton from "@/Components/PrimaryButton";
 import LineProgress from "@/Components/LineProgress";
-import GoalCard from "@/Components/GoalCard";
 
 export default function Show({ auth, goal }: PageProps<{ goal: GoalType }>) {
 
@@ -47,7 +46,7 @@ export default function Show({ auth, goal }: PageProps<{ goal: GoalType }>) {
 
                             <p>Target amount: {goal.target_amount.formatted}</p>
                             <p>Target date: {goal.target_date}</p>
-                            <p>Linked account: {goal.account.name}</p>
+                            <p>Linked account: <Link href={route('accounts.show', goal.account.id)}>{goal.account.name}</Link></p>
 
                             <h2 className="font-semibold text-xl text-gray-900 inline-flex mt-2">
                                 Current progress
@@ -55,7 +54,7 @@ export default function Show({ auth, goal }: PageProps<{ goal: GoalType }>) {
                             <p>Current amount: <MoneyDisplay money={goal.current_amount} /></p>
                             <LineProgress status={goal.status} percentage={goal.completion_percentage} />
 
-                            <h2 className="font-semibold text-xl text-gray-900 inline-flex">
+                            <h2 className="font-semibold text-xl text-gray-900 inline-flex mt-2">
                                 Projected progress
                             </h2>
                             <p>Projected total: <MoneyDisplay money={goal.projected_total_by_target_date} /></p>
