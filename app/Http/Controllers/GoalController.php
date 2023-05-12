@@ -36,7 +36,7 @@ class GoalController extends Controller
      */
     public function show(Goal $goal): Response
     {
-        return Inertia::render('Goal', [
+        return Inertia::render('Goals/Show', [
             'goal' => new GoalResource($goal),
         ]);
     }

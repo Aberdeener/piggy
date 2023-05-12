@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AccountBalanceUpdateRequest;
+use App\Http\Requests\UpdateAccountBalanceRequest;
 use App\Models\Account;
 use Cknow\Money\Money;
 
@@ -13,7 +13,7 @@ class AccountUpdateBalanceController extends Controller
         $this->authorizeResource(Account::class);
     }
 
-    public function __invoke(AccountBalanceUpdateRequest $request, Account $account)
+    public function __invoke(UpdateAccountBalanceRequest $request, Account $account)
     {
         $account->updateBalance(Money::USD($request->balance));
 

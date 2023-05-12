@@ -1,15 +1,13 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import {
-    Account as AccountType,
-    AccountBalanceHistory,
     CreditCard,
     CreditCardBalanceHistory,
-    NetWorth,
     PageProps
 } from '@/types';
 import React from "react";
 import BalanceLineChart from "@/Components/BalanceLineChart";
+import LineProgress from "@/Components/LineProgress";
 
 export default function Account({ auth, creditCard, creditCardBalanceHistory }: PageProps<{ creditCard: CreditCard, creditCardBalanceHistory: CreditCardBalanceHistory[] }>) {
 
@@ -33,6 +31,7 @@ export default function Account({ auth, creditCard, creditCardBalanceHistory }: 
                             <div className="ml-4 text-lg leading-7 font-semibold">
                                 {JSON.stringify(creditCard)}
                                 <BalanceLineChart categories={apexCategories} series={apexSeries} />
+                                <LineProgress status={creditCard.utilization} percentage={creditCard.utilization_percentage} />
                             </div>
                         </div>
                     </div>

@@ -10,7 +10,7 @@ import MoneyDisplay from "@/Components/MoneyDisplay";
 import PrimaryButton from "@/Components/PrimaryButton";
 import LineProgress from "@/Components/LineProgress";
 
-export default function Goal({ auth, goal }: PageProps<{ goal: GoalType }>) {
+export default function Show({ auth, goal }: PageProps<{ goal: GoalType }>) {
 
     const { patch } = useForm();
 
@@ -19,6 +19,8 @@ export default function Goal({ auth, goal }: PageProps<{ goal: GoalType }>) {
             preserveScroll: true,
         });
     }
+
+    const [showCreateDepositModal, setShowCreateDepositModal] = useState(false);
 
     const [showDepositEditModal, setShowDepositEditModal] = useState(false);
     const [currentDepositEditModalId, setCurrentDepositEditModalId] = useState(0);
@@ -62,7 +64,9 @@ export default function Goal({ auth, goal }: PageProps<{ goal: GoalType }>) {
                                 <h2 className="font-semibold text-xl text-gray-900 inline-flex">
                                     Auto deposits
                                 </h2>
-                                <PrimaryButton onClick={() => router.visit(route('goals.create'))}>Create</PrimaryButton>
+                                <PrimaryButton onClick={() => setShowCreateDepositModal(true)}>Create</PrimaryButton>
+                                <Modal show={showCreateDepositModal} onClose={() => setShowCreateDepositModal(false)}>
+                                </Modal>
                             </div>
                             <table className="w-full text-sm text-left text-gray-500">
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">

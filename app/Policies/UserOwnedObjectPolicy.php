@@ -8,10 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class UserOwnedObjectPolicy
 {
     private const BYPASS_METHODS = [
-        // Any user can view the index
-        'viewAny',
-        // Any user can view the page to make a new object
-        'create',
         // Any user can store a new object
         'store',
     ];

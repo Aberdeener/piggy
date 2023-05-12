@@ -14,22 +14,37 @@ import {
     IconProgress,
 } from "@tabler/icons-react";
 import PrimaryButton from "@/Components/PrimaryButton";
+import CreateAccountModal from "@/Pages/Accounts/CreateAccountModal";
+import CreateGoalModal from "@/Pages/Goals/CreateGoalModal";
 
 export default function Dashboard({ auth, netWorth, accounts, creditCards, goals }: PageProps<{ netWorth: NetWorth, accounts: Account[], creditCards: CreditCard[], goals: Goal[] }>) {
     const [showNetWorthCalculation, setShowNetWorthCalculation] = useState(false);
-
-    const data = netWorth.history.map(a => {
-        return {
-            name: a.date,
-            amount: a.amount.amount,
-        }
-    });
 
     const apexCategories = netWorth.history.map(a => a.date);
     const apexSeries = [{
         name: 'Net Worth',
         data: netWorth.history.map(a => a.amount.amount),
     }];
+
+    const calculateGridCols = (count: number) => {
+        if (count % 4 === 0) {
+            return 'grid-cols-4';
+        }
+
+        if (count % 2 === 0) {
+            return 'grid-cols-2';
+        }
+
+        if (count === 1) {
+            return 'grid-cols-1';
+        }
+
+        return 'grid-cols-3';
+    }
+
+    const [showCreateAccountModal, setShowCreateAccountModal] = useState(false);
+    const [showCreateCreditCardModal, setShowCreateCreditCardModal] = useState(false);
+    const [showCreateGoalModal, setShowCreateGoalModal] = useState(false);
 
     return (
         <AuthenticatedLayout
@@ -84,9 +99,10 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                                 <h2 className="font-semibold text-2xl text-gray-900 inline-flex">
                                     <IconMoneybag className="w-8 h-8 mr-2" /> Accounts
                                 </h2>
-                                <PrimaryButton onClick={() => router.visit(route('accounts.create'))}>Create</PrimaryButton>
+                                <PrimaryButton onClick={() => setShowCreateAccountModal(true)}>Create</PrimaryButton>
+                                <CreateAccountModal show={showCreateAccountModal} onClose={() => setShowCreateAccountModal(false)} />
                             </div>
-                            <div className="grid gap-4 grid-flow-col">
+                            <div className={`grid gap-4 ${calculateGridCols(accounts.length)}`}>
                                 {accounts.length > 0
                                     ? accounts.map(a => <AccountCard account={a} />)
                                     : <p className="text-gray-500">No accounts yet</p>
@@ -100,7 +116,7 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                                 </h2>
                                 <PrimaryButton onClick={() => router.visit(route('credit-cards.create'))}>Create</PrimaryButton>
                             </div>
-                            <div className="grid gap-4 grid-flow-col">
+                            <div className={`grid gap-4 ${calculateGridCols(creditCards.length)}`}>
                                 {creditCards.length > 0
                                     ? creditCards.map(c => <CreditCardCard creditCard={c} />)
                                     : <p className="text-gray-500">No credit cards yet</p>
@@ -112,9 +128,10 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                                 <h2 className="font-semibold text-2xl text-gray-900 inline-flex">
                                     <IconProgress className="w-8 h-8 mr-2" /> Goals
                                 </h2>
-                                <PrimaryButton onClick={() => router.visit(route('goals.create'))}>Create</PrimaryButton>
+                                <PrimaryButton onClick={() => setShowCreateGoalModal(true)}>Create</PrimaryButton>
+                                <CreateGoalModal show={showCreateGoalModal} onClose={() => setShowCreateGoalModal(false)} />
                             </div>
-                            <div className="grid gap-4 grid-flow-col">
+                            <div className={`grid gap-4 ${calculateGridCols(goals.length)}`}>
                                 {goals.length > 0
                                     ? goals.map(g => <GoalCard goal={g} />)
                                     : <p className="text-gray-500">No goals yet</p>

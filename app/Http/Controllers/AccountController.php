@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AccountStoreRequest;
+use App\Http\Requests\DestroyAccountRequest;
+use App\Http\Requests\StoreAccountRequest;
+use App\Http\Requests\UpdateAccountRequest;
 use App\Http\Resources\AccountBalanceResource;
 use App\Http\Resources\AccountResource;
 use App\Models\Account;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Inertia\Inertia;
 use Inertia\Response;
 use Cknow\Money\Money;
@@ -19,26 +19,7 @@ class AccountController extends Controller
         $this->authorizeResource(Account::class);
     }
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): Response
-    {
-        return Inertia::render('Accounts/Index', [
-            'accounts' => AccountResource::collection(request()->user()->accounts),
-        ]);
-    }
-
-    public function create(): Response
-    {
-        return Inertia::render('Accounts/Create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(AccountStoreRequest $request): Response
-    {
+    public function store(StoreAccountRequest $request) {
         $account = new Account();
         $account->name = $request->name;
         $account->user_id = request()->user()->id;
@@ -50,12 +31,9 @@ class AccountController extends Controller
 
         $account->user->updateNetWorth();
 
-        return $this->index();
+        return to_route('dashboard');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Account $account): Response
     {
         return Inertia::render('Accounts/Show', [
@@ -64,29 +42,19 @@ class AccountController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateAccountRequest $request, Account $account): JsonResource
+    public function update(UpdateAccountRequest $request, Account $account)
     {
         $account->update($request->validated());
 
-        return new AccountResource($account);
+        return back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Request $request, Account $account): Response
+    public function destroy(DestroyAccountRequest $request, Account $account)
     {
-        $request->validate([
-            'password' => ['required', 'current_password'],
-        ]);
-
         $account->delete();
 
         $account->user->updateNetWorth();
 
-        return $this->index();
+        return to_route('dashboard');
     }
 }

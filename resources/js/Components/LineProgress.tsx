@@ -1,14 +1,17 @@
-import {GoalStatus} from "@/types";
+import {CreditCardUtilization, GoalStatus} from "@/types";
 
-export default function LineProgress({ status, percentage }: { status: GoalStatus, percentage: number }) {
-    const barColour = (status: GoalStatus) => {
-        switch (status) {
-            case 'completed':
-                return 'bg-green-500';
-            case 'on_track':
-                return 'bg-yellow-500';
-            case 'off_track':
-                return 'bg-red-500';
+export default function LineProgress({ status, percentage }: { status: GoalStatus | CreditCardUtilization, percentage: number }) {
+    const barColour = (status: GoalStatus | CreditCardUtilization) => {
+        if (status === 'completed' || status === 'low') {
+            return 'bg-green-500';
+        }
+
+        if (status === 'on_track' || status === 'medium') {
+            return 'bg-yellow-500';
+        }
+
+        if (status === 'off_track' || status === 'high' || status === 'over_limit') {
+            return 'bg-red-500';
         }
     }
 

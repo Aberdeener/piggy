@@ -34,16 +34,22 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('accounts', AccountController::class);
+    Route::resource('accounts', AccountController::class)->only([
+        'store', 'show', 'update', 'destroy',
+    ]);
     Route::patch('/accounts/{account}/balance', AccountUpdateBalanceController::class)
         ->name('accounts.update-balance');
 
-    Route::resource('credit-cards', CreditCardController::class);
-    Route::patch('/credit-cards/{creditCard}/balance', CreditCardUpdateBalanceController::class)
+    Route::resource('credit-cards', CreditCardController::class)->only([
+        'store', 'show', 'update', 'destroy',
+    ]);
+    Route::patch('/credit-cards/{credit_card}/balance', CreditCardUpdateBalanceController::class)
         ->name('credit-cards.update-balance');
 
-    Route::resource('goals', GoalController::class);
-    Route::patch('/goal-auto-deposits/{goalAutoDeposit}/toggle', GoalAutoDepositToggleController::class)
+    Route::resource('goals', GoalController::class)->only([
+        'store', 'show', 'update', 'destroy',
+    ]);
+    Route::patch('/goal-auto-deposits/{goal_auto_deposit}/toggle', GoalAutoDepositToggleController::class)
         ->name('goal-auto-deposits.toggle');
 });
 
