@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -46,9 +47,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(UserNetWorth::class);
     }
 
+    public function latestNetWorth(): Money
+    {
+        return $this->netWorths()->latest()->first()?->amount ?? Money::USD(0);
+    }
+
     public function updateNetWorth(): void
     {
-        $latestStoredNetWorth = $this->netWorths()->latest()->first()?->amount->getAmount();
+        $latestStoredNetWorth = $this->latestNetWorth()->getAmount();
         $currentNetWorth = $this->currentNetWorth()->getAmount();
 
         if ($latestStoredNetWorth === $currentNetWorth) {

@@ -17,7 +17,7 @@ class DashboardController extends Controller
 
         return Inertia::render('Dashboard', [
             'netWorth' => [
-                'current' => $user->currentNetWorth(),
+                'current' => $user->latestNetWorth(),
                 'history' => UserNetWorthResource::collection($user->netWorths),
             ],
             'accounts' => AccountResource::collection($user->accounts),

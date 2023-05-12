@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import {Head, router} from '@inertiajs/react';
+import {Head, Link, router} from '@inertiajs/react';
 import {Account, CreditCard, Goal, NetWorth, PageProps} from '@/types';
 import AccountCard from "@/Components/AccountCard";
 import React, {useState} from "react";
@@ -10,12 +10,13 @@ import GoalCard from "@/Components/GoalCard";
 import BalanceLineChart from "@/Components/BalanceLineChart";
 import {
     IconCreditCard,
-    IconMoneybag,
+    IconMoneybag, IconPencil,
     IconProgress,
 } from "@tabler/icons-react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import CreateAccountModal from "@/Pages/Accounts/CreateAccountModal";
 import CreateGoalModal from "@/Pages/Goals/CreateGoalModal";
+import SecondaryButton from "@/Components/SecondaryButton";
 
 export default function Dashboard({ auth, netWorth, accounts, creditCards, goals }: PageProps<{ netWorth: NetWorth, accounts: Account[], creditCards: CreditCard[], goals: Goal[] }>) {
     const [showNetWorthCalculation, setShowNetWorthCalculation] = useState(false);
@@ -60,31 +61,35 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                             <div className="ml-4 text-lg leading-7 font-semibold">
                                 Net Worth: <MoneyDisplay money={netWorth.current} className="hover:underline cursor-help" onClick={() => setShowNetWorthCalculation(true)} />
                                 <Modal show={showNetWorthCalculation} onClose={() => setShowNetWorthCalculation(false)}>
-                                    <table>
-                                        <thead>
+                                    <table className="w-full text-sm text-left text-gray-500">
+                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                             <tr>
-                                                <th>Account</th>
-                                                <th>Balance</th>
+                                                <th scope="col" className="px-6 py-3">Account</th>
+                                                <th scope="col" className="px-6 py-3">Balance</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {accounts.map(a => {
                                                 return (
-                                                    <tr key={a.id}>
-                                                        <td>{a.name}</td>
-                                                        <td><MoneyDisplay money={a.balance}/></td>
+                                                    <tr className="bg-white border-b" key={a.id}>
+                                                        <td className="px-6 py-4">
+                                                            <Link href={route('accounts.show', a.id)}>{a.name}</Link>
+                                                        </td>
+                                                        <td className="px-6 py-4"><MoneyDisplay money={a.balance}/></td>
                                                     </tr>
                                                 )
                                             })}
-                                            <tr>
-                                                <th>Credit Card</th>
-                                                <th>Balance</th>
+                                            <tr className="text-xs text-gray-700 uppercase bg-gray-50">
+                                                <th scope="col" className="px-6 py-3">Credit Card</th>
+                                                <th scope="col" className="px-6 py-3">Balance</th>
                                             </tr>
                                             {creditCards.map(c => {
                                                 return (
-                                                    <tr key={c.id}>
-                                                        <td>{c.name}</td>
-                                                        <td><MoneyDisplay money={c.balance} creditCard /></td>
+                                                    <tr className="bg-white border-b" key={c.id}>
+                                                        <td className="px-6 py-4">
+                                                            <Link href={route('credit-cards.show', c.id)}>{c.name}</Link>
+                                                        </td>
+                                                        <td className="px-6 py-4"><MoneyDisplay money={c.balance} creditCard /></td>
                                                     </tr>
                                                 )
                                             })}
