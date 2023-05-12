@@ -4,12 +4,13 @@ namespace App\Policies;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class UserOwnedObjectPolicy
 {
     private const BYPASS_METHODS = [
-        // Any user can store a new object
-        'store',
+        // Any user can create a new object
+        'create',
     ];
 
     public function __call($name, $arguments)

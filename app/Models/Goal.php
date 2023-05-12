@@ -23,6 +23,14 @@ class Goal extends Model
         'target_date' => 'datetime',
     ];
 
+    protected $fillable = [
+        'name',
+        'target_amount',
+        'target_date',
+        'account_id',
+        'current_amount',
+    ];
+
     public function user(): HasOneThrough
     {
         return $this->hasOneThrough(User::class, Account::class, 'id', 'id', 'account_id', 'user_id');

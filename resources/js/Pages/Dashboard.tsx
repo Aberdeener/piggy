@@ -70,7 +70,7 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                                         <tbody>
                                             {accounts.map(a => {
                                                 return (
-                                                    <tr>
+                                                    <tr key={a.id}>
                                                         <td>{a.name}</td>
                                                         <td><MoneyDisplay money={a.balance}/></td>
                                                     </tr>
@@ -82,7 +82,7 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                                             </tr>
                                             {creditCards.map(c => {
                                                 return (
-                                                    <tr>
+                                                    <tr key={c.id}>
                                                         <td>{c.name}</td>
                                                         <td><MoneyDisplay money={c.balance} creditCard /></td>
                                                     </tr>
@@ -104,7 +104,7 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                             </div>
                             <div className={`grid gap-4 ${calculateGridCols(accounts.length)}`}>
                                 {accounts.length > 0
-                                    ? accounts.map(a => <AccountCard account={a} />)
+                                    ? accounts.map(a => <AccountCard key={a.id} account={a} />)
                                     : <p className="text-gray-500">No accounts yet</p>
                                 }
                             </div>
@@ -118,7 +118,7 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                             </div>
                             <div className={`grid gap-4 ${calculateGridCols(creditCards.length)}`}>
                                 {creditCards.length > 0
-                                    ? creditCards.map(c => <CreditCardCard creditCard={c} />)
+                                    ? creditCards.map(c => <CreditCardCard key={c.id} creditCard={c} />)
                                     : <p className="text-gray-500">No credit cards yet</p>
                                 }
                             </div>
@@ -129,11 +129,11 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                                     <IconProgress className="w-8 h-8 mr-2" /> Goals
                                 </h2>
                                 <PrimaryButton onClick={() => setShowCreateGoalModal(true)}>Create</PrimaryButton>
-                                <CreateGoalModal show={showCreateGoalModal} onClose={() => setShowCreateGoalModal(false)} />
+                                <CreateGoalModal accounts={accounts} show={showCreateGoalModal} onClose={() => setShowCreateGoalModal(false)} />
                             </div>
                             <div className={`grid gap-4 ${calculateGridCols(goals.length)}`}>
                                 {goals.length > 0
-                                    ? goals.map(g => <GoalCard goal={g} />)
+                                    ? goals.map(g => <GoalCard key={g.id} goal={g} />)
                                     : <p className="text-gray-500">No goals yet</p>
                                 }
                             </div>

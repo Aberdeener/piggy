@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreGoalRequest;
 use App\Http\Resources\GoalResource;
 use App\Models\Goal;
 use Illuminate\Http\JsonResponse;
@@ -22,13 +23,16 @@ class GoalController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreGoalRequest $request): JsonResource
+    public function store(StoreGoalRequest $request)
     {
         $goal = new Goal($request->validated());
-        $goal->user()->associate($request->user());
+        if ($request->use_account_balance_to_start) {
+            $goal->current_amount = $goal->account->balance;
+        }
+
         $goal->save();
 
-        return new GoalResource($goal);
+        return back();
     }
 
     /**

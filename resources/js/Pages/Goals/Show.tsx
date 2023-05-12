@@ -9,6 +9,7 @@ import Modal from "@/Components/Modal";
 import MoneyDisplay from "@/Components/MoneyDisplay";
 import PrimaryButton from "@/Components/PrimaryButton";
 import LineProgress from "@/Components/LineProgress";
+import GoalCard from "@/Components/GoalCard";
 
 export default function Show({ auth, goal }: PageProps<{ goal: GoalType }>) {
 
@@ -92,35 +93,42 @@ export default function Show({ auth, goal }: PageProps<{ goal: GoalType }>) {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    {goal.auto_deposits.map((deposit) => {
-                                        return (
-                                            <tr className="bg-white border-b" key={deposit.id}>
-                                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                                    {deposit.withdraw_account_id}
-                                                </th>
-                                                <td className="px-6 py-4">
-                                                    {deposit.amount.formatted}
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    {deposit.frequency}
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    {deposit.next_deposit_date.toString()}
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <label className="relative inline-flex items-center cursor-pointer">
-                                                        <input type="checkbox" className="sr-only peer" defaultChecked={deposit.enabled} onChange={() => toggleDepositEnabled(deposit.id)} />
-                                                        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#838BF1]"></div>
-                                                    </label>
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <SecondaryButton onClick={() => showDepositEditModalForId(deposit.id)}>
-                                                        <IconPencil className="h-4 w-4" />
-                                                    </SecondaryButton>
+                                    {goal.auto_deposits.length > 0
+                                        ? goal.auto_deposits.map((deposit) => {
+                                            return (
+                                                <tr className="bg-white border-b" key={deposit.id}>
+                                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                        {deposit.withdraw_account_id}
+                                                    </th>
+                                                    <td className="px-6 py-4">
+                                                        {deposit.amount.formatted}
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        {deposit.frequency}
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        {deposit.next_deposit_date.toString()}
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        <label className="relative inline-flex items-center cursor-pointer">
+                                                            <input type="checkbox" className="sr-only peer" defaultChecked={deposit.enabled} onChange={() => toggleDepositEnabled(deposit.id)} />
+                                                            <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#838BF1]"></div>
+                                                        </label>
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        <SecondaryButton onClick={() => showDepositEditModalForId(deposit.id)}>
+                                                            <IconPencil className="h-4 w-4" />
+                                                        </SecondaryButton>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        }) : (
+                                            <tr className="bg-white border-b">
+                                                <td className="px-6 py-4" colSpan={6}>
+                                                    No auto deposits
                                                 </td>
                                             </tr>
-                                        );
-                                    })}
+                                        )}
                                 </tbody>
                             </table>
                             <Modal show={showDepositEditModal} onClose={() => setShowDepositEditModal(false)}>

@@ -1,4 +1,4 @@
-import {useForm} from "@inertiajs/react";
+import {useForm, usePage} from "@inertiajs/react";
 import React, {FormEventHandler, useEffect, useState} from "react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
@@ -8,12 +8,15 @@ import Modal from "@/Components/Modal";
 import SecondaryButton from "@/Components/SecondaryButton";
 import Datepicker from "react-tailwindcss-datepicker";
 import MoneyInput from "@/Components/MoneyInput";
+import {Account} from "@/types";
 
-export default function CreateGoalModal({ show, onClose }: { show: boolean, onClose: () => void }) {
+export default function CreateGoalModal({ accounts, show, onClose }: { accounts: Account[], show: boolean, onClose: () => void }) {
     const { data, setData, post, processing, errors, reset, isDirty } = useForm({
         name: '',
         target_date: new Date(),
         target_amount: 0,
+        account_id: 0,
+        use_account_balance_to_start: false,
     });
 
     useEffect(() => {
@@ -34,6 +37,7 @@ export default function CreateGoalModal({ show, onClose }: { show: boolean, onCl
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
 
+    // @ts-ignore
     return (
         <Modal show={show} onClose={onClose}>
             <form onSubmit={submit} className="m-4">
@@ -66,6 +70,30 @@ export default function CreateGoalModal({ show, onClose }: { show: boolean, onCl
                     containerClassName={"mt-1 relative"}
                 />
                 <InputError className="mt-2" message={errors.target_date} />
+
+                <InputLabel htmlFor="account_id" value="Account" className="mt-2" />
+                <select
+                    id="account_id"
+                    name="account_id"
+                    className="mt-1 block w-full"
+                    value={data.account_id}
+                    onChange={(e) => setData('account_id', e.target.value)}
+                >
+                    <option value="0">Select an account</option>
+                    {accounts.map((account: Account) => (
+                        <option key={account.id} value={account.id}>{account.name}</option>
+                    ))}
+                </select>
+                <InputError className="mt-2" message={errors.account_id} />
+
+                {data.account_id !== 0 && (<>
+                    <InputLabel htmlFor="use_account_balance_to_start" value="Use account balance to start?" className="mt-2" />
+                    <label className="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" className="sr-only peer" value="0" onChange={(e) => setData('use_account_balance_to_start', !use_account_balance_to_start)} />
+                        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#838BF1]"></div>
+                    </label>
+                    <InputError className="mt-2" message={errors.use_account_balance_to_start} />
+                </>)}
 
                 <div className="mt-6 flex justify-end">
                     <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>

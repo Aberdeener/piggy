@@ -43,7 +43,6 @@ export type AutoDepositFrequency = 'daily' | 'weekly' | 'biweekly' | 'monthly';
 export interface Account {
     id: number;
     name: string;
-    goals: Goal[];
     balance: Money;
 }
 
