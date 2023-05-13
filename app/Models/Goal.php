@@ -94,7 +94,7 @@ class Goal extends Model
     public function projectedTotal(): Money
     {
         $projectedAutoDepositTotal = $this->autoDeposits->filter(function (GoalAutoDeposit $autoDeposit) {
-            return $autoDeposit->enabled;
+            return $autoDeposit->enabled && $autoDeposit->start_date->isPast();
         })->reduce(function (Money $sum, GoalAutoDeposit $autoDeposit) {
             return $sum->add($autoDeposit->amount->multiply($autoDeposit->determineIterationsUntil($this->target_date)));
         }, Money::USD(0));

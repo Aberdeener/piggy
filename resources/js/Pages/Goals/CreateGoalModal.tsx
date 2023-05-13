@@ -44,10 +44,13 @@ export default function CreateGoalModal({ accounts, show, onClose }: { accounts:
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
 
-    // @ts-ignore
     return (
         <Modal show={show} onClose={onClose}>
             <form onSubmit={submit} className="m-4">
+                <h2 className="text-lg font-medium text-gray-900 pb-2">
+                    Creating Goal
+                </h2>
+
                 <InputLabel htmlFor="name" value="Name" />
                 <TextInput
                     id="name"
@@ -56,7 +59,7 @@ export default function CreateGoalModal({ accounts, show, onClose }: { accounts:
                     onChange={(e) => setData('name', e.target.value)}
                     required
                     isFocused
-                    placeholder="Goal name"
+                    placeholder="Name"
                 />
                 <InputError className="mt-2" message={errors.name} />
 

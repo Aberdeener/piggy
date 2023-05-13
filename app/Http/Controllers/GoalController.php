@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreGoalRequest;
+use App\Http\Resources\AccountResource;
 use App\Http\Resources\GoalResource;
 use App\Models\Goal;
 use Cknow\Money\Money;
@@ -43,6 +44,7 @@ class GoalController extends Controller
     {
         return Inertia::render('Goals/Show', [
             'goal' => new GoalResource($goal),
+            'accounts' => AccountResource::collection($goal->user->accounts),
         ]);
     }
 

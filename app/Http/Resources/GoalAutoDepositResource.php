@@ -19,6 +19,7 @@ class GoalAutoDepositResource extends JsonResource
             'amount' => $this->amount,
             'withdraw_account_id' => $this->withdraw_account_id,
             'frequency' => $this->frequency,
+            'start_date' => $this->start_date,
             'last_deposit_date' => $this->last_deposit_date,
             'next_deposit_date' => $this->nextDepositDate(),
             'enabled' => $this->enabled,

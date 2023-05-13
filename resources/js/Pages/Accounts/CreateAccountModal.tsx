@@ -11,7 +11,7 @@ import MoneyInput from "@/Components/MoneyInput";
 export default function CreateAccountModal({ show, onClose }: { show: boolean, onClose: () => void }) {
     const { data, setData, post, processing, errors, reset, isDirty } = useForm({
         name: '',
-        balance: 0,
+        balance: undefined,
     });
 
     const submit: FormEventHandler = (e) => {
@@ -29,11 +29,15 @@ export default function CreateAccountModal({ show, onClose }: { show: boolean, o
     return (
         <Modal show={show} onClose={onClose}>
             <form onSubmit={submit} className="m-4">
+                <h2 className="text-lg font-medium text-gray-900 pb-2">
+                    Creating Account
+                </h2>
+
                 <InputLabel htmlFor="name" value="Name" />
 
                 <TextInput
                     id="name"
-                    placeholder="Account name"
+                    placeholder="Name"
                     className="mt-1 block w-full"
                     value={data.name}
                     onChange={(e) => setData('name', e.target.value)}

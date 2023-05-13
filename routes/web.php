@@ -5,6 +5,7 @@ use App\Http\Controllers\AccountUpdateBalanceController;
 use App\Http\Controllers\CreditCardController;
 use App\Http\Controllers\CreditCardUpdateBalanceController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GoalAutoDepositController;
 use App\Http\Controllers\GoalAutoDepositToggleController;
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\ProfileController;
@@ -48,6 +49,10 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('goals', GoalController::class)->only([
         'store', 'show', 'update', 'destroy',
+    ]);
+
+    Route::resource('goal-auto-deposits', GoalAutoDepositController::class)->only([
+        'store', 'update', 'destroy',
     ]);
     Route::patch('/goal-auto-deposits/{goal_auto_deposit}/toggle', GoalAutoDepositToggleController::class)
         ->name('goal-auto-deposits.toggle');

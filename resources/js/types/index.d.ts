@@ -38,12 +38,18 @@ export interface AutoDeposit {
     enabled: boolean;
 }
 
+// TODO: use enum
 export type AutoDepositFrequency = 'daily' | 'weekly' | 'biweekly' | 'monthly';
 
 export interface Account {
     id: number;
     name: string;
     balance: Money;
+}
+
+export enum AccountType {
+    CHECKING = 'checking',
+    SAVINGS = 'savings',
 }
 
 export interface AccountBalanceHistory {
