@@ -7,7 +7,7 @@ use App\Models\Goal;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreGoalAutoDepositRequest extends FormRequest
+class UpdateGoalAutoDepositRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

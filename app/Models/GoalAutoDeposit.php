@@ -8,6 +8,7 @@ use Cknow\Money\Casts\MoneyIntegerCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 
@@ -34,6 +35,11 @@ class GoalAutoDeposit extends Model
     public function goal(): BelongsTo
     {
         return $this->belongsTo(Goal::class);
+    }
+
+    public function user(): HasOneThrough
+    {
+        return $this->hasOneThrough(User::class, Goal::class);
     }
 
     public function withdrawAccount(): BelongsTo
@@ -73,7 +79,7 @@ class GoalAutoDeposit extends Model
         $iterations = 0;
         $nextDepositDate = $this->nextDepositDate()->startOfDay();
 
-        while ($nextDepositDate->lessThan($targetDate)) {
+        while ($nextDepositDate->lessThan($targetDate) && $nextDepositDate->greaterThan($this->start_date)) {
             $iterations++;
             $nextDepositDate = match ($this->frequency) {
                 GoalAutoDepositFrequency::Daily => $nextDepositDate->addDay(),

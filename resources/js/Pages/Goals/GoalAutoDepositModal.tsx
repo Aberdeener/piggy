@@ -8,24 +8,24 @@ import Modal from "@/Components/Modal";
 import SecondaryButton from "@/Components/SecondaryButton";
 import Datepicker from "react-tailwindcss-datepicker";
 import MoneyInput from "@/Components/MoneyInput";
-import {Account, AccountType, AutoDepositFrequency, Goal} from "@/types";
+import {Account, AccountType, AutoDeposit, AutoDepositFrequency, Goal} from "@/types";
 import {DateValueType} from "react-tailwindcss-datepicker/dist/types";
+import {dateFormat, uppercaseFirst} from "@/utils";
 
-export default function CreateGoalAutoDepositModal({ goal, accounts, show, onClose }: { goal: Goal, accounts: Account[], show: boolean, onClose: () => void }) {
-    const { data, setData, post, processing, errors, reset, isDirty } = useForm({
+export default function GoalAutoDepositModal({ goal, accounts, autoDeposit, show, onClose }: { goal: Goal, accounts: Account[], autoDeposit?: AutoDeposit, show: boolean, onClose: () => void }) {
+    const { data, setData, post, processing, errors, reset, patch, isDirty } = useForm({
         goal_id: goal.id,
-        amount: undefined,
-        frequency: '' as AutoDepositFrequency,
-        withdraw_account_id: 0,
-        start_date: undefined as Date | undefined,
-        enabled: true,
+        amount: autoDeposit ? autoDeposit.amount.amount / 100 : undefined,
+        frequency: autoDeposit ? autoDeposit.frequency : '' as AutoDepositFrequency,
+        withdraw_account_id: autoDeposit ? autoDeposit.withdraw_account_id : 0,
+        start_date: autoDeposit ? autoDeposit.start_date : undefined as Date | undefined,
+        enabled: autoDeposit ? autoDeposit.enabled : true,
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
         // TODO: meh
-        // TODO: money formatting util
         const withdrawAccountId = document.getElementById('withdraw_account_id') as HTMLSelectElement;
         if (data.withdraw_account_id == 0) {
             withdrawAccountId.setCustomValidity('Please select an account');
@@ -34,13 +34,20 @@ export default function CreateGoalAutoDepositModal({ goal, accounts, show, onClo
             withdrawAccountId.setCustomValidity('');
         }
 
-        post(route('goal-auto-deposits.store'), {
+        const options = {
             preserveScroll: true,
             onSuccess: () => {
                 onClose()
                 reset()
             },
-        });
+        };
+
+        if (autoDeposit) {
+            // TODO: seems to mark our auto deposit as enabled when it's not
+            patch(route('goal-auto-deposits.update', autoDeposit.id), options);
+        } else {
+            post(route('goal-auto-deposits.store'), options)
+        }
     };
 
     const yesterday = new Date();
@@ -52,10 +59,10 @@ export default function CreateGoalAutoDepositModal({ goal, accounts, show, onClo
                 return 'day';
             case 'weekly':
                 return 'week';
-            case 'biweekly':
-                return '2 weeks';
             case 'monthly':
                 return 'month';
+            case 'yearly':
+                return 'year';
         }
     }
 
@@ -63,7 +70,7 @@ export default function CreateGoalAutoDepositModal({ goal, accounts, show, onClo
         <Modal show={show} onClose={onClose}>
             <form onSubmit={submit} className="m-4">
                 <h2 className="text-lg font-medium text-gray-900 pb-2">
-                    Creating Auto Deposit
+                    {autoDeposit ? 'Editing' : 'Creating'} Auto Deposit
                 </h2>
 
                 <InputLabel htmlFor="amount" value="Amount" className="mt-2" />
@@ -81,8 +88,8 @@ export default function CreateGoalAutoDepositModal({ goal, accounts, show, onClo
                     <option value="0" disabled>
                         Select a frequency
                     </option>
-                    {['daily', 'weekly', 'biweekly', 'monthly'].map((frequency: string) => (
-                        <option key={frequency} value={frequency}>{frequency}</option>
+                    {['daily', 'weekly', 'monthly', 'yearly'].map((frequency: string) => (
+                        <option key={frequency} value={frequency}>{uppercaseFirst(frequency)}</option>
                     ))}
                 </select>
                 <InputError className="mt-2" message={errors.frequency} />
@@ -116,8 +123,8 @@ export default function CreateGoalAutoDepositModal({ goal, accounts, show, onClo
 
                 <InputLabel htmlFor="withdraw_account_id" value="Account" className="mt-2" />
                 <select
-                    id="account_id"
-                    name="account_id"
+                    id="withdraw_account_id"
+                    name="withdraw_account_id"
                     className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                     value={data.withdraw_account_id}
                     onChange={e => setData('withdraw_account_id', Number(e.target.value))}
@@ -133,7 +140,7 @@ export default function CreateGoalAutoDepositModal({ goal, accounts, show, onClo
 
                 {data.amount !== undefined && data.amount > 0 && data.frequency && data.start_date != undefined && data.withdraw_account_id != 0 && (
                     <div className="mt-2 text-gray-500 text-sm">
-                        <p>${data.amount} will be taken from your {accounts.find(a => a.id == data.withdraw_account_id)?.name} account every {frequencyWord(data.frequency)} starting on {data.start_date.toDateString()}.</p>
+                        <p>${data.amount} will be taken from your {accounts.find(a => a.id == data.withdraw_account_id)?.name} account every {frequencyWord(data.frequency)}, starting on {dateFormat(data.start_date)}.</p>
                     </div>
                 )}
 
@@ -141,7 +148,7 @@ export default function CreateGoalAutoDepositModal({ goal, accounts, show, onClo
                     <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
 
                     <PrimaryButton className="ml-3" disabled={processing || !isDirty}>
-                        Create
+                        {autoDeposit ? 'Save' : 'Create'}
                     </PrimaryButton>
                 </div>
             </form>

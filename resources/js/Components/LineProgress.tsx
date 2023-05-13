@@ -6,6 +6,7 @@ export default function LineProgress({ status, percentage }: { status: GoalStatu
             return 'bg-green-500';
         }
 
+        // TODO: on_track never seems to be used for projected percentages
         if (status === 'on_track' || status === 'medium') {
             return 'bg-yellow-500';
         }

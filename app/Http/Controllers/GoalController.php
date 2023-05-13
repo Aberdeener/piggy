@@ -6,7 +6,6 @@ use App\Http\Requests\StoreGoalRequest;
 use App\Http\Resources\AccountResource;
 use App\Http\Resources\GoalResource;
 use App\Models\Goal;
-use Cknow\Money\Money;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Inertia\Inertia;
@@ -29,6 +28,7 @@ class GoalController extends Controller
     {
         $goal = new Goal($request->validated());
         if ($request->use_account_balance_to_start) {
+            // TODO: should we use the same historic balance system as accounts/cc so we can graph it?
             $goal->current_amount = $goal->account->latestBalance();
         }
 

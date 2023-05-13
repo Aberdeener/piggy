@@ -20,13 +20,18 @@ class GoalAutoDepositController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreGoalAutoDepositRequest $request): JsonResponse
+    public function store(StoreGoalAutoDepositRequest $request)
     {
-        $goalAutoDeposit = new GoalAutoDeposit($request->validated());
-        $goalAutoDeposit->user()->associate($request->user());
+        $goalAutoDeposit = new GoalAutoDeposit();
+        $goalAutoDeposit->goal_id = $request->goal_id;
+        $goalAutoDeposit->withdraw_account_id = $request->withdraw_account_id;
+        $goalAutoDeposit->start_date = $request->start_date;
+        $goalAutoDeposit->frequency = $request->frequency;
+        $goalAutoDeposit->amount = $request->amount;
+        $goalAutoDeposit->enabled = true;
         $goalAutoDeposit->save();
 
-        return response()->json($goalAutoDeposit);
+        return back();
     }
 
     /**
@@ -40,11 +45,16 @@ class GoalAutoDepositController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateGoalAutoDepositRequest $request, GoalAutoDeposit $goalAutoDeposit): JsonResponse
+    public function update(UpdateGoalAutoDepositRequest $request, GoalAutoDeposit $goalAutoDeposit)
     {
-        $goalAutoDeposit->update($request->validated());
+        $goalAutoDeposit->goal_id = $request->goal_id;
+        $goalAutoDeposit->withdraw_account_id = $request->withdraw_account_id;
+        $goalAutoDeposit->start_date = $request->start_date;
+        $goalAutoDeposit->frequency = $request->frequency;
+        $goalAutoDeposit->amount = $request->amount;
+        $goalAutoDeposit->save();
 
-        return response()->json($goalAutoDeposit);
+        return back();
     }
 
     /**

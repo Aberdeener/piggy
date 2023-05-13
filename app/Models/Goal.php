@@ -58,7 +58,7 @@ class Goal extends Model
             return GoalStatus::Completed;
         }
 
-        if ($this->target_date->lessThan(now())) {
+        if ($this->target_date->isPast()) {
             return GoalStatus::OffTrack;
         }
 
@@ -80,7 +80,7 @@ class Goal extends Model
             return GoalStatus::Completed;
         }
 
-        if ($this->target_date->lessThan(now())) {
+        if ($this->target_date->isPast()) {
             return GoalStatus::OffTrack;
         }
 
@@ -94,7 +94,7 @@ class Goal extends Model
     public function projectedTotal(): Money
     {
         $projectedAutoDepositTotal = $this->autoDeposits->filter(function (GoalAutoDeposit $autoDeposit) {
-            return $autoDeposit->enabled && $autoDeposit->start_date->isPast();
+            return $autoDeposit->enabled;
         })->reduce(function (Money $sum, GoalAutoDeposit $autoDeposit) {
             return $sum->add($autoDeposit->amount->multiply($autoDeposit->determineIterationsUntil($this->target_date)));
         }, Money::USD(0));

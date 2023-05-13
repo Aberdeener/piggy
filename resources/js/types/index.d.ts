@@ -33,13 +33,14 @@ export interface AutoDeposit {
     amount: Money;
     withdraw_account_id: number;
     frequency: AutoDepositFrequency;
+    start_date: string;
     next_deposit_date: string;
     last_deposit_date: string;
     enabled: boolean;
 }
 
 // TODO: use enum
-export type AutoDepositFrequency = 'daily' | 'weekly' | 'biweekly' | 'monthly';
+export type AutoDepositFrequency = 'daily' | 'weekly' | 'monthly' | 'yearly';
 
 export interface Account {
     id: number;
