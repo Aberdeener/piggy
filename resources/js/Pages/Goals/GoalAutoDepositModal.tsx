@@ -83,7 +83,7 @@ export default function GoalAutoDepositModal({ goal, accounts, autoDeposit, show
                     name="frequency"
                     className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                     value={data.frequency}
-                    onChange={e => setData('frequency', e.target.value)}
+                    onChange={e => setData('frequency', e.target.value as AutoDepositFrequency)}
                 >
                     <option value="0" disabled>
                         Select a frequency
