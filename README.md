@@ -18,3 +18,13 @@
 ### Code locations
 - Frontend: `resources/`
 - Backend: `app/`
+
+### Todo
+- Edit account
+- Reorder accounts
+- Edit credit card
+- Reorder credit cards
+- Delete credit card
+- Better graph aggregation
+- Reminder emails
+- Handle no cards/accounts in net worth table
