@@ -15,7 +15,7 @@ class StoreAccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', Rule::unique('accounts')->where('user_id', request()->user()->id)],
+            'name' => ['required', 'string', 'max:255', Rule::unique('accounts')->where('user_id', request()->user()->id)->whereNull('deleted_at')],
             'balance' => ['required', 'numeric', 'min:0'],
         ];
     }

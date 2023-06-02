@@ -15,7 +15,7 @@ class StoreGoalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', Rule::unique('goals')->whereIn('account_id', $this->user()->accounts->pluck('id')->toArray())],
+            'name' => ['required', 'string', Rule::unique('goals')->whereIn('account_id', $this->user()->accounts->pluck('id')->toArray())->whereNull('deleted_at')],
             'target_amount' => ['required', 'numeric', 'min:0'],
             'target_date' => ['required', 'date', 'after:today'],
             'account_id' => ['required', Rule::exists('accounts', 'id')->where('user_id', $this->user()->id)],
