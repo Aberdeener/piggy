@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -54,12 +53,12 @@ class Goal extends Model
 
     public function status(): GoalStatus
     {
-        if ($this->current_amount->greaterThanOrEqual($this->target_amount)) {
-            return GoalStatus::Completed;
-        }
-
         if ($this->target_date->isPast()) {
             return GoalStatus::OffTrack;
+        }
+
+        if ($this->current_amount->greaterThanOrEqual($this->target_amount)) {
+            return GoalStatus::Completed;
         }
 
         if ($this->projectedTotal()->lessThan($this->target_amount)) {
@@ -76,12 +75,12 @@ class Goal extends Model
 
     public function projectedStatus(): GoalStatus
     {
-        if ($this->projectedTotal()->greaterThanOrEqual($this->target_amount)) {
-            return GoalStatus::Completed;
-        }
-
         if ($this->target_date->isPast()) {
             return GoalStatus::OffTrack;
+        }
+
+        if ($this->projectedTotal()->greaterThanOrEqual($this->target_amount)) {
+            return GoalStatus::Completed;
         }
 
         if ($this->projectedTotal()->lessThan($this->target_amount)) {
