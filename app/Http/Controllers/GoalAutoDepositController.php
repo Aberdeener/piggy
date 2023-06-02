@@ -31,6 +31,10 @@ class GoalAutoDepositController extends Controller
         $goalAutoDeposit->enabled = true;
         $goalAutoDeposit->save();
 
+        if ($goalAutoDeposit->shouldDeposit()) {
+            $goalAutoDeposit->deposit();
+        }
+
         return back();
     }
 

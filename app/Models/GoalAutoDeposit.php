@@ -49,7 +49,7 @@ class GoalAutoDeposit extends Model
 
     public function shouldDeposit(): bool
     {
-        return $this->start_date->isPast() && $this->nextDepositDate()->isToday();
+        return ($this->start_date->isToday() || $this->start_date->isPast()) && $this->nextDepositDate()->isToday();
     }
 
     public function deposit(): void
