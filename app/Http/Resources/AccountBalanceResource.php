@@ -2,9 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Models\AccountBalance;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/** @mixin AccountBalance */
 class AccountBalanceResource extends JsonResource
 {
     /**

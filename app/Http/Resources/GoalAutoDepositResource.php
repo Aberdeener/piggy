@@ -2,9 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Models\GoalAutoDeposit;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/** @mixin GoalAutoDeposit */
 class GoalAutoDepositResource extends JsonResource
 {
     /**

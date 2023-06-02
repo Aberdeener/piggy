@@ -2,9 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Models\CreditCard;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/** @mixin CreditCard */
 class CreditCardResource extends JsonResource
 {
     /**
