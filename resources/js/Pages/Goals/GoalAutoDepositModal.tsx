@@ -11,6 +11,7 @@ import MoneyInput from "@/Components/MoneyInput";
 import {Account, AccountType, AutoDeposit, AutoDepositFrequency, Goal} from "@/types";
 import {DateValueType} from "react-tailwindcss-datepicker/dist/types";
 import {dateFormat, uppercaseFirst} from "@/utils";
+import DangerButton from "@/Components/DangerButton";
 
 export default function GoalAutoDepositModal({ goal, accounts, autoDeposit, show, onClose }: { goal: Goal, accounts: Account[], autoDeposit?: AutoDeposit, show: boolean, onClose: () => void }) {
     const { data, setData, post, processing, errors, reset, patch, isDirty } = useForm({
@@ -144,12 +145,19 @@ export default function GoalAutoDepositModal({ goal, accounts, autoDeposit, show
                     </div>
                 )}
 
-                <div className="mt-6 flex justify-end">
-                    <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
+                <div className="mt-6 flex justify-between">
+                    {autoDeposit && (
+                        <div>
+                            <DangerButton>Delete</DangerButton>
+                        </div>
+                    )}
+                    <div>
+                        <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
 
-                    <PrimaryButton className="ml-3" disabled={processing || !isDirty}>
-                        {autoDeposit ? 'Save' : 'Create'}
-                    </PrimaryButton>
+                        <PrimaryButton className="ml-3" disabled={processing || !isDirty}>
+                            {autoDeposit ? 'Save' : 'Create'}
+                        </PrimaryButton>
+                    </div>
                 </div>
             </form>
         </Modal>

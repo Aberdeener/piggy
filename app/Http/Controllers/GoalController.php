@@ -61,10 +61,10 @@ class GoalController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Goal $goal): JsonResponse
+    public function destroy(Goal $goal)
     {
         $goal->delete();
 
-        return response()->json($goal);
+        return to_route('dashboard');
     }
 }

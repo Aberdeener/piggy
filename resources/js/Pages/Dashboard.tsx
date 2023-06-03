@@ -17,6 +17,7 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import CreateAccountModal from "@/Pages/Accounts/CreateAccountModal";
 import CreateGoalModal from "@/Pages/Goals/CreateGoalModal";
 import SecondaryButton from "@/Components/SecondaryButton";
+import CreateCreditCardModel from "@/Pages/CreditCards/CreateCreditCardModal";
 
 export default function Dashboard({ auth, netWorth, accounts, creditCards, goals }: PageProps<{ netWorth: NetWorth, accounts: Account[], creditCards: CreditCard[], goals: Goal[] }>) {
     const [showNetWorthCalculation, setShowNetWorthCalculation] = useState(false);
@@ -69,30 +70,44 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {accounts.map(a => {
-                                                return (
-                                                    <tr className="bg-white border-b" key={a.id}>
-                                                        <td className="px-6 py-4">
-                                                            <Link href={route('accounts.show', a.id)}>{a.name}</Link>
-                                                        </td>
-                                                        <td className="px-6 py-4"><MoneyDisplay money={a.balance}/></td>
+                                            {accounts.length > 0
+                                                ? accounts.map(a => {
+                                                    return (
+                                                        <tr className="bg-white border-b" key={a.id}>
+                                                            <td className="px-6 py-4">
+                                                                <Link href={route('accounts.show', a.id)}>{a.name}</Link>
+                                                            </td>
+                                                            <td className="px-6 py-4"><MoneyDisplay money={a.balance}/></td>
+                                                        </tr>
+                                                    )
+                                                })
+                                                : (
+                                                    <tr className="bg-white border-b">
+                                                        <td className="px-6 py-4" colSpan={2}>No accounts yet</td>
                                                     </tr>
                                                 )
-                                            })}
+                                            }
                                             <tr className="text-xs text-gray-700 uppercase bg-gray-50">
                                                 <th scope="col" className="px-6 py-3">Credit Card</th>
                                                 <th scope="col" className="px-6 py-3">Balance</th>
                                             </tr>
-                                            {creditCards.map(c => {
-                                                return (
-                                                    <tr className="bg-white border-b" key={c.id}>
-                                                        <td className="px-6 py-4">
-                                                            <Link href={route('credit-cards.show', c.id)}>{c.name}</Link>
-                                                        </td>
-                                                        <td className="px-6 py-4"><MoneyDisplay money={c.balance} creditCard /></td>
+                                            {creditCards.length > 0 ?
+                                                creditCards.map(c => {
+                                                    return (
+                                                        <tr className="bg-white border-b" key={c.id}>
+                                                            <td className="px-6 py-4">
+                                                                <Link href={route('credit-cards.show', c.id)}>{c.name}</Link>
+                                                            </td>
+                                                            <td className="px-6 py-4"><MoneyDisplay money={c.balance} creditCard /></td>
+                                                        </tr>
+                                                    )
+                                                })
+                                                : (
+                                                    <tr className="bg-white border-b">
+                                                        <td className="px-6 py-4" colSpan={2}>No credit cards yet</td>
                                                     </tr>
                                                 )
-                                            })}
+                                            }
                                         </tbody>
                                     </table>
                                 </Modal>
@@ -119,7 +134,8 @@ export default function Dashboard({ auth, netWorth, accounts, creditCards, goals
                                 <h2 className="font-semibold text-2xl text-gray-900 inline-flex">
                                     <IconCreditCard className="w-8 h-8 mr-2" /> Credit Cards
                                 </h2>
-                                <PrimaryButton onClick={() => router.visit(route('credit-cards.create'))}>Create</PrimaryButton>
+                                <PrimaryButton onClick={() => setShowCreateCreditCardModal(true)}>Create</PrimaryButton>
+                                <CreateCreditCardModel show={showCreateCreditCardModal} onClose={() => setShowCreateCreditCardModal(false)} />
                             </div>
                             <div className={`grid gap-4 ${calculateGridCols(creditCards.length)}`}>
                                 {creditCards.length > 0
