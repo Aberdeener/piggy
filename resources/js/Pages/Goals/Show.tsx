@@ -11,6 +11,7 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import LineProgress from "@/Components/LineProgress";
 import GoalAutoDepositModal from "@/Pages/Goals/GoalAutoDepositModal";
 import {dateFormat, uppercaseFirst} from "@/utils";
+import DeleteResourceButton from "@/Components/DeleteResourceButton";
 
 export default function Show({ auth, goal, accounts }: PageProps<{ goal: GoalType, accounts: Account[] }>) {
 
@@ -145,10 +146,9 @@ export default function Show({ auth, goal, accounts }: PageProps<{ goal: GoalTyp
                                         )}
                                     </tbody>
                                 </table>
-                                {showDepositEditModal && (
-                                    <GoalAutoDepositModal goal={goal} accounts={accounts} show={showDepositEditModal} onClose={() => setShowDepositEditModal(false)} autoDeposit={goal.auto_deposits.find((autoDeposit) => autoDeposit.id == currentDepositEditModalId)} />
-                                )}
+                                <GoalAutoDepositModal goal={goal} accounts={accounts} show={showDepositEditModal} onClose={() => setShowDepositEditModal(false)} autoDeposit={goal.auto_deposits.find((autoDeposit) => autoDeposit.id == currentDepositEditModalId)} />
                             </div>
+                            <DeleteResourceButton path={route('goals.destroy', goal.id)} type="goal" />
                         </div>
                     </div>
                 </div>

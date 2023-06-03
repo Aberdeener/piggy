@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
+use App\Concerns\HasBalance;
 use App\Enums\CreditCardUtilization;
 use Cknow\Money\Casts\MoneyIntegerCast;
 use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CreditCard extends Model
 {
     use HasFactory;
+    use HasBalance;
 
     protected $casts = [
         'limit' => MoneyIntegerCast::class,
@@ -21,16 +22,6 @@ class CreditCard extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function balances(): HasMany
-    {
-        return $this->hasMany(CreditCardBalance::class);
-    }
-
-    public function latestBalance(): Money
-    {
-        return $this->balances()->latest()->first()->balance;
     }
 
     public function utilization(): CreditCardUtilization

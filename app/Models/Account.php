@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\HasBalance;
 use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Account extends Model
 {
     use HasFactory, SoftDeletes;
+    use HasBalance;
 
     protected $fillable = [
         'name',
@@ -21,16 +23,6 @@ class Account extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function balances(): HasMany
-    {
-        return $this->hasMany(AccountBalance::class);
-    }
-
-    public function latestBalance(): Money
-    {
-        return $this->balances()->latest()->first()->balance;
     }
 
     public function autoDeposits(): BelongsToMany

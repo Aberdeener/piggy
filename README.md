@@ -28,3 +28,4 @@
 - Better graph aggregation
 - Reminder emails
 - Handle no cards/accounts in net worth table
+- Date picker returns 1 day behind the selected date

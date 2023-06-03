@@ -18,13 +18,6 @@ class CreditCardController extends Controller
         $this->authorizeResource(CreditCard::class);
     }
 
-    public function index(): Response
-    {
-        return Inertia::render('CreditCards', [
-            'creditCards' => CreditCardResource::collection(request()->user()->creditCards),
-        ]);
-    }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -46,7 +39,7 @@ class CreditCardController extends Controller
      */
     public function show(CreditCard $creditCard): Response
     {
-        return Inertia::render('CreditCard', [
+        return Inertia::render('CreditCards/Show', [
             'creditCard' => new CreditCardResource($creditCard),
             'creditCardBalanceHistory' => CreditCardBalanceResource::collection($creditCard->balances),
         ]);
@@ -73,6 +66,10 @@ class CreditCardController extends Controller
      */
     public function destroy(CreditCard $creditCard)
     {
-        //
+        $creditCard->delete();
+
+        $creditCard->user->updateNetWorth();
+
+        return to_route('dashboard');
     }
 }

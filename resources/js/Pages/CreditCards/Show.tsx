@@ -8,6 +8,8 @@ import {
 import React from "react";
 import BalanceLineChart from "@/Components/BalanceLineChart";
 import LineProgress from "@/Components/LineProgress";
+import MoneyDisplay from "@/Components/MoneyDisplay";
+import DeleteResourceButton from "@/Components/DeleteResourceButton";
 
 export default function Account({ auth, creditCard, creditCardBalanceHistory }: PageProps<{ creditCard: CreditCard, creditCardBalanceHistory: CreditCardBalanceHistory[] }>) {
 
@@ -29,9 +31,10 @@ export default function Account({ auth, creditCard, creditCardBalanceHistory }: 
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 bg-white border-b border-gray-200">
                             <div className="ml-4 text-lg leading-7 font-semibold">
-                                {JSON.stringify(creditCard)}
+                                Balance: <MoneyDisplay money={creditCard.balance} creditCard />
                                 <BalanceLineChart categories={apexCategories} series={apexSeries} />
                                 <LineProgress status={creditCard.utilization} percentage={creditCard.utilization_percentage} />
+                                <DeleteResourceButton path={route('credit-cards.destroy', creditCard.id)} type="credit_card" />
                             </div>
                         </div>
                     </div>
