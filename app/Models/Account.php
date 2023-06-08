@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Concerns\HasBalance;
+use App\Models\Concerns\HasBalance;
 use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -35,18 +35,8 @@ class Account extends Model
         return $this->hasMany(Goal::class);
     }
 
-    public function updateBalance(Money $balance): void
+    public function onBalanceUpdated(Money $difference): void
     {
-        if ($this->latestBalance()->equals($balance)) {
-            return;
-        }
-
-        $difference = $balance->subtract($this->latestBalance());
-
-        $this->balances()->create([
-            'balance' => $balance,
-        ]);
-
         $this->goals->each(function (Goal $goal) use ($difference) {
             $goal->incrementCurrentAmount($difference);
         });

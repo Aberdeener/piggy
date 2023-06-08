@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Concerns\HasBalance;
 use App\Enums\CreditCardUtilization;
+use App\Models\Concerns\HasBalance;
 use Cknow\Money\Casts\MoneyIntegerCast;
 use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -46,16 +46,8 @@ class CreditCard extends Model
         return number_format($this->latestBalance()->getAmount() / $this->limit->getAmount() * 100, 2);
     }
 
-    public function updateBalance(Money $balance): void
+    public function onBalanceUpdated(Money $difference): void
     {
-        if ($this->latestBalance()->equals($balance)) {
-            return;
-        }
-
-        $this->balances()->create([
-            'balance' => $balance,
-        ]);
-
         $this->user->updateNetWorth();
     }
 }
