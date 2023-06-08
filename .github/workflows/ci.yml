@@ -12,8 +12,10 @@ jobs:
           uses: actions/checkout@v2
         - name: Install dependencies
           run: composer install
-        - name: Create application key
-          run: php artisan key:generate
+        - name: Bootstrap application
+          run: |
+            cp .env.example .env
+            php artisan key:generate
         - name: Create SQLite database
           run: touch database/test_database.sqlite
         - name: Run PHPUnit tests
