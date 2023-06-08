@@ -1,7 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import {Account as AccountType, BalanceHistory, PageProps} from '@/types';
-import Chart from "react-apexcharts";
 import React from "react";
 import BalanceLineChart from "@/Components/BalanceLineChart";
 import DeleteResourceButton from "@/Components/DeleteResourceButton";

@@ -8,7 +8,7 @@ import Modal from "@/Components/Modal";
 import SecondaryButton from "@/Components/SecondaryButton";
 import Datepicker from "react-tailwindcss-datepicker";
 import MoneyInput from "@/Components/MoneyInput";
-import {Account, AccountType, AutoDeposit, AutoDepositFrequency, Goal} from "@/types";
+import {Account, AutoDeposit, AutoDepositFrequency, Goal} from "@/types";
 import {DateValueType} from "react-tailwindcss-datepicker/dist/types";
 import {dateFormat, uppercaseFirst} from "@/utils";
 import DangerButton from "@/Components/DangerButton";

@@ -46,7 +46,7 @@ class CreditCard extends Model
         return number_format($this->latestBalance()->getAmount() / $this->limit->getAmount() * 100, 2);
     }
 
-    public function onBalanceUpdated(Money $difference): void
+    public function onBalanceUpdated(): void
     {
         $this->user->updateNetWorth();
     }
