@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCreditCardRequest;
 use App\Http\Resources\BalanceResource;
 use App\Http\Resources\CreditCardResource;
 use App\Models\CreditCard;
+use Cknow\Money\Money;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -31,7 +33,19 @@ class CreditCardController extends Controller
      */
     public function store(StoreCreditCardRequest $request)
     {
-        //
+        $creditCard = new CreditCard();
+        $creditCard->name = $request->name;
+        $creditCard->limit = Money::USD($request->limit);
+        $creditCard->user_id = request()->user()->id;
+        $creditCard->save();
+
+        $creditCard->balances()->create([
+            'balance' => Money::USD($request->balance),
+        ]);
+
+        $creditCard->user->updateNetWorth();
+
+        return to_route('dashboard');
     }
 
     /**
