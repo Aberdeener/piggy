@@ -75,7 +75,7 @@ class CreditCardTest extends TestCase
         $this->assertEquals('20.00', $creditCard->utilizationPercentage());
     }
 
-    public function test_update_balance_does_not_create_new_balance_if_balance_is_the_same(): void
+    public function test_update_balance_updates_user_net_worth_if_balance_is_different(): void
     {
         $creditCard = CreditCard::factory()->create([
             'limit' => Money::USD(10_00),
@@ -85,23 +85,13 @@ class CreditCardTest extends TestCase
             'balance' => Money::USD(2_00),
         ]);
 
-        $creditCard->updateBalance(Money::USD(2_00));
-
-        $this->assertCount(1, $creditCard->balances);
-    }
-
-    public function test_update_balance_creates_new_balance_if_balance_is_different(): void
-    {
-        $creditCard = CreditCard::factory()->create([
-            'limit' => Money::USD(10_00),
-        ]);
-
-        $creditCard->balances()->create([
-            'balance' => Money::USD(2_00),
-        ]);
+        $userNetWorth = $creditCard->user->latestNetWorth();
 
         $creditCard->updateBalance(Money::USD(3_00));
 
-        $this->assertCount(2, $creditCard->balances);
+        $newNetWorth = $creditCard->user->latestNetWorth();
+
+        $this->assertNotEquals($userNetWorth, $newNetWorth);
+        $this->assertEquals($userNetWorth->subtract(Money::USD(3_00)), $newNetWorth);
     }
 }

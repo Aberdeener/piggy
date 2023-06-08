@@ -2,13 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Account>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\UserNetWorth>
  */
-class AccountFactory extends Factory
+class UserNetWorthFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,10 +16,8 @@ class AccountFactory extends Factory
      */
     public function definition(): array
     {
-        $user = User::factory()->create();
         return [
-            'user_id' => $user->id,
-            'name' => $this->faker->word,
+            //
         ];
     }
 }

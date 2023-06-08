@@ -21,7 +21,7 @@ class CreditCardFactory extends Factory
         return [
             'user_id' => $user->id,
             'name' => $this->faker->word,
-            'limit' => $this->faker->numberBetween(10000, 100000),
+            'limit' => $this->faker->numberBetween(100_00, 1000_00),
         ];
     }
 }

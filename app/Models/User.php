@@ -51,7 +51,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function latestNetWorth(): Money
     {
-        return $this->netWorths()->latest()->first()?->amount ?? Money::USD(0);
+        return $this->netWorths()->first()->amount ?? Money::USD(0);
     }
 
     public function updateNetWorth(): void
