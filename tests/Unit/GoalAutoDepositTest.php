@@ -28,7 +28,7 @@ class GoalAutoDepositTest extends TestCase
 
         $goalAutoDeposit->deposit();
 
-        $this->assertEquals($goalAutoDeposit->goal->current_amount, $goalAutoDeposit->amount);
+        $this->assertEquals($goalAutoDeposit->goal->latestBalance(), $goalAutoDeposit->amount);
     }
 
     public function test_deposit_updates_last_deposit_date(): void

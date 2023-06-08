@@ -66,12 +66,10 @@ class GoalAutoDeposit extends Model
             $this->last_deposit_date = $this->start_date;
         }
 
-        return match ($this->frequency) {
-            GoalAutoDepositFrequency::Daily => $this->last_deposit_date->addDay(),
-            GoalAutoDepositFrequency::Weekly => $this->last_deposit_date->addWeek(),
-            GoalAutoDepositFrequency::Monthly => $this->last_deposit_date->addMonth(),
-            GoalAutoDepositFrequency::Yearly => $this->last_deposit_date->addYear(),
-        };
+        return $this->carbonOperation(
+            $this->frequency,
+            $this->last_deposit_date
+        );
     }
 
     public function determineIterationsUntil(Carbon $targetDate): int
@@ -81,14 +79,22 @@ class GoalAutoDeposit extends Model
 
         while ($nextDepositDate->lessThan($targetDate) && $nextDepositDate->greaterThan($this->start_date)) {
             $iterations++;
-            $nextDepositDate = match ($this->frequency) {
-                GoalAutoDepositFrequency::Daily => $nextDepositDate->addDay(),
-                GoalAutoDepositFrequency::Weekly => $nextDepositDate->addWeek(),
-                GoalAutoDepositFrequency::Monthly => $nextDepositDate->addMonth(),
-                GoalAutoDepositFrequency::Yearly => $nextDepositDate->addYear(),
-            };
+            $nextDepositDate = $this->carbonOperation(
+                $this->frequency,
+                $nextDepositDate
+            );
         }
 
         return $iterations;
+    }
+
+    private function carbonOperation(GoalAutoDepositFrequency $frequency, Carbon $date): Carbon
+    {
+        return match ($frequency) {
+            GoalAutoDepositFrequency::Daily => $date->addDay(),
+            GoalAutoDepositFrequency::Weekly => $date->addWeek(),
+            GoalAutoDepositFrequency::Monthly => $date->addMonth(),
+            GoalAutoDepositFrequency::Yearly => $date->addYear(),
+        };
     }
 }

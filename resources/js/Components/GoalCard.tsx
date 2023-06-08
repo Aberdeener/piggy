@@ -15,7 +15,7 @@ export default function GoalCard({ goal }: { goal: Goal }) {
             <div className="font-normal text-gray-500">
                 <p>Target: {goal.target_amount.formatted}</p>
                 <p>Target date: {dateFormat(goal.target_date)}</p>
-                <p>Current: <MoneyDisplay money={goal.current_amount} /></p>
+                <p>Current: <MoneyDisplay money={goal.balance} /></p>
                 <p>Status: <GoalStatusBadge status={goal.status} completion_percentage={goal.completion_percentage} /></p>
                 <p>Account: <Link href={route('accounts.show', goal.account.id)}><strong>{goal.account.name}</strong></Link></p>
             </div>

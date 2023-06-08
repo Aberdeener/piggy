@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreGoalRequest;
 use App\Http\Resources\AccountResource;
+use App\Http\Resources\BalanceResource;
 use App\Http\Resources\GoalResource;
 use App\Models\Goal;
 use Illuminate\Http\JsonResponse;
@@ -27,12 +28,11 @@ class GoalController extends Controller
     public function store(StoreGoalRequest $request)
     {
         $goal = new Goal($request->validated());
-        if ($request->use_account_balance_to_start) {
-            // TODO: should we use the same historic balance system as accounts/cc so we can graph it?
-            $goal->current_amount = $goal->account->latestBalance();
-        }
-
         $goal->save();
+
+        if ($request->use_account_balance_to_start) {
+            $goal->updateBalance($goal->account->latestBalance());
+        }
 
         return back();
     }
@@ -44,6 +44,7 @@ class GoalController extends Controller
     {
         return Inertia::render('Goals/Show', [
             'goal' => new GoalResource($goal),
+            'goalBalanceHistory' => BalanceResource::collection($goal->balances),
             'accounts' => AccountResource::collection($goal->user->accounts),
         ]);
     }

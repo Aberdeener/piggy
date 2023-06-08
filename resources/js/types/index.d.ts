@@ -17,7 +17,7 @@ export interface Goal {
     target_amount: Money;
     target_date: string;
     status: GoalStatus;
-    current_amount: Money;
+    balance: Money;
     completion_percentage: number;
     account: Account;
     auto_deposits: AutoDeposit[];
@@ -48,16 +48,6 @@ export interface Account {
     balance: Money;
 }
 
-export enum AccountType {
-    CHECKING = 'checking',
-    SAVINGS = 'savings',
-}
-
-export interface AccountBalanceHistory {
-    date: string;
-    balance: Money;
-}
-
 export interface CreditCard {
     id: number;
     name: string;
@@ -67,7 +57,7 @@ export interface CreditCard {
     utilization_percentage: number;
 }
 
-export interface CreditCardBalanceHistory {
+export interface BalanceHistory {
     date: string;
     balance: Money;
 }

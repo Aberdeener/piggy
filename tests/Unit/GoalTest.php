@@ -11,13 +11,14 @@ use Tests\TestCase;
 
 class GoalTest extends TestCase
 {
-    public function test_status_complete_when_current_amount_is_target(): void
+    public function test_status_complete_when_latest_balance_is_target(): void
     {
         $goal = Goal::factory()->create([
             'target_amount' => Money::USD(10_00),
-            'current_amount' => Money::USD(10_00),
             'target_date' => now()->addDays(30),
         ]);
+
+        $goal->updateBalance(Money::USD(10_00));
 
         $this->assertEquals(GoalStatus::Completed, $goal->status());
     }
@@ -26,7 +27,6 @@ class GoalTest extends TestCase
     {
         $goal = Goal::factory()->create([
             'target_amount' => Money::USD(10_00),
-            'current_amount' => Money::USD(0),
             'target_date' => now()->addDays(30),
         ]);
 
@@ -37,7 +37,6 @@ class GoalTest extends TestCase
     {
         $goal = Goal::factory()->create([
             'target_amount' => Money::USD(10_00),
-            'current_amount' => Money::USD(0),
             'target_date' => now()->addDays(30),
         ]);
 
@@ -58,7 +57,6 @@ class GoalTest extends TestCase
     {
         $goal = Goal::factory()->create([
             'target_amount' => Money::USD(10_00),
-            'current_amount' => Money::USD(0),
             'target_date' => now()->addDays(30),
         ]);
 
@@ -79,9 +77,9 @@ class GoalTest extends TestCase
     {
         $goal = Goal::factory()->create([
             'target_amount' => Money::USD(10_00),
-            'current_amount' => Money::USD(5_00),
             'target_date' => now()->addDays(30),
         ]);
+        $goal->updateBalance(Money::USD(5_00));
 
         $this->assertEquals(Money::USD(5_00), $goal->projectedTotal());
     }
@@ -90,9 +88,9 @@ class GoalTest extends TestCase
     {
         $goal = Goal::factory()->create([
             'target_amount' => Money::USD(10_00),
-            'current_amount' => Money::USD(5_00),
             'target_date' => now()->addDays(30),
         ]);
+        $goal->updateBalance(Money::USD(5_00));
 
         $goal->autoDeposits()->create([
             'frequency' => GoalAutoDepositFrequency::Daily,
@@ -112,9 +110,9 @@ class GoalTest extends TestCase
     {
         $goal = Goal::factory()->create([
             'target_amount' => Money::USD(10_00),
-            'current_amount' => Money::USD(5_00),
             'target_date' => now()->addDays(30),
         ]);
+        $goal->updateBalance(Money::USD(5_00));
 
         $goal->autoDeposits()->create([
             'frequency' => GoalAutoDepositFrequency::Daily,
@@ -133,9 +131,9 @@ class GoalTest extends TestCase
     {
         $goal = Goal::factory()->create([
             'target_amount' => Money::USD(10_00),
-            'current_amount' => Money::USD(5_00),
             'target_date' => now()->addDays(30),
         ]);
+        $goal->updateBalance(Money::USD(5_00));
 
         $this->assertEquals('50.00', $goal->completionPercentage());
     }
@@ -144,9 +142,9 @@ class GoalTest extends TestCase
     {
         $goal = Goal::factory()->create([
             'target_amount' => Money::USD(10_00),
-            'current_amount' => Money::USD(11_00),
             'target_date' => now()->addDays(30),
         ]);
+        $goal->updateBalance(Money::USD(11_00));
 
         $this->assertEquals('110.00', $goal->completionPercentage());
     }

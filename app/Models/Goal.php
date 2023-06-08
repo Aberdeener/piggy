@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\GoalStatus;
+use App\Models\Concerns\HasBalance;
 use Cknow\Money\Casts\MoneyIntegerCast;
 use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,10 +16,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Goal extends Model
 {
     use HasFactory, SoftDeletes;
+    use HasBalance;
 
     protected $casts = [
         'target_amount' => MoneyIntegerCast::class,
-        'current_amount' => MoneyIntegerCast::class,
         'target_date' => 'datetime',
     ];
 
@@ -27,7 +28,6 @@ class Goal extends Model
         'target_amount',
         'target_date',
         'account_id',
-        'current_amount',
     ];
 
     public function user(): HasOneThrough
@@ -47,21 +47,20 @@ class Goal extends Model
 
     public function incrementCurrentAmount(Money $amount): void
     {
-        $this->current_amount = $this->current_amount->add($amount);
-        $this->save();
+        $this->updateBalance($this->latestBalance()->add($amount));
     }
 
     public function status(): GoalStatus
     {
-        if ($this->target_date->isPast()) {
-            return GoalStatus::OffTrack;
-        }
-
-        if ($this->current_amount->greaterThanOrEqual($this->target_amount)) {
+        if ($this->latestBalance()->greaterThanOrEqual($this->target_amount)) {
             return GoalStatus::Completed;
         }
 
         if ($this->projectedTotal()->lessThan($this->target_amount)) {
+            return GoalStatus::OffTrack;
+        }
+
+        if ($this->target_date->isPast()) {
             return GoalStatus::OffTrack;
         }
 
@@ -70,15 +69,11 @@ class Goal extends Model
 
     public function completionPercentage(): string
     {
-        return number_format($this->current_amount->getAmount() / $this->target_amount->getAmount() * 100, 2);
+        return number_format($this->latestBalance()->getAmount() / $this->target_amount->getAmount() * 100, 2);
     }
 
     public function projectedStatus(): GoalStatus
     {
-        if ($this->target_date->isPast()) {
-            return GoalStatus::OffTrack;
-        }
-
         if ($this->projectedTotal()->greaterThanOrEqual($this->target_amount)) {
             return GoalStatus::Completed;
         }
@@ -87,8 +82,14 @@ class Goal extends Model
             return GoalStatus::OffTrack;
         }
 
+        if ($this->target_date->isPast()) {
+            return GoalStatus::OffTrack;
+        }
+
         return GoalStatus::OnTrack;
     }
+
+    // TODO: PROJECTED TARGET DATE
 
     public function projectedTotal(): Money
     {
@@ -98,7 +99,7 @@ class Goal extends Model
             return $sum->add($autoDeposit->amount->multiply($autoDeposit->determineIterationsUntil($this->target_date)));
         }, Money::USD(0));
 
-        return $this->current_amount->add($projectedAutoDepositTotal);
+        return $this->latestBalance()->add($projectedAutoDepositTotal);
     }
 
     public function projectedCompletionPercentage(): string

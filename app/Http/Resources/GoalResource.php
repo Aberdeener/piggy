@@ -21,7 +21,7 @@ class GoalResource extends JsonResource
             'name' => $this->name,
             'target_date' => $this->target_date,
             'target_amount' => $this->target_amount,
-            'current_amount' => $this->current_amount,
+            'balance' => $this->latestBalance(),
             'status' => $this->status(),
             'completion_percentage' => $this->completionPercentage(),
             'account' => new AccountResource($this->account),

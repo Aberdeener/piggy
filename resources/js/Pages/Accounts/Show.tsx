@@ -1,20 +1,13 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import {Account as AccountType, AccountBalanceHistory, CreditCard, NetWorth, PageProps} from '@/types';
+import {Account as AccountType, BalanceHistory, PageProps} from '@/types';
 import Chart from "react-apexcharts";
 import React from "react";
 import BalanceLineChart from "@/Components/BalanceLineChart";
 import DeleteResourceButton from "@/Components/DeleteResourceButton";
 import MoneyDisplay from "@/Components/MoneyDisplay";
 
-export default function Show({ auth, account, accountBalanceHistory }: PageProps<{ account: AccountType, accountBalanceHistory: AccountBalanceHistory[] }>) {
-
-    const data = accountBalanceHistory.map((history) => {
-        return {
-            name: history.date,
-            amount: history.balance.amount,
-        }
-    });
+export default function Show({ auth, account, accountBalanceHistory }: PageProps<{ account: AccountType, accountBalanceHistory: BalanceHistory[] }>) {
 
     const apexCategories = accountBalanceHistory.map((history) => history.date);
     const apexSeries = [{

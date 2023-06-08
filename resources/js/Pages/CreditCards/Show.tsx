@@ -2,7 +2,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import {
     CreditCard,
-    CreditCardBalanceHistory,
+    BalanceHistory,
     PageProps
 } from '@/types';
 import React from "react";
@@ -11,7 +11,7 @@ import LineProgress from "@/Components/LineProgress";
 import MoneyDisplay from "@/Components/MoneyDisplay";
 import DeleteResourceButton from "@/Components/DeleteResourceButton";
 
-export default function Account({ auth, creditCard, creditCardBalanceHistory }: PageProps<{ creditCard: CreditCard, creditCardBalanceHistory: CreditCardBalanceHistory[] }>) {
+export default function CreditCard({ auth, creditCard, creditCardBalanceHistory }: PageProps<{ creditCard: CreditCard, creditCardBalanceHistory: BalanceHistory[] }>) {
 
     const apexCategories = creditCardBalanceHistory.map((history) => history.date);
     const apexSeries = [{

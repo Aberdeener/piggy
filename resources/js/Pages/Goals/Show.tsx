@@ -1,7 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import {Head, Link, router, useForm} from '@inertiajs/react';
 import React, {useState} from "react";
-import {PageProps, Goal as GoalType, GoalStatus, Account} from "@/types";
+import {PageProps, Goal as GoalType, GoalStatus, Account, BalanceHistory} from "@/types";
 import SecondaryButton from "@/Components/SecondaryButton";
 import {IconPencil, IconProgress} from "@tabler/icons-react";
 import GoalStatusBadge from "@/Components/GoalStatusBadge";
@@ -12,8 +12,9 @@ import LineProgress from "@/Components/LineProgress";
 import GoalAutoDepositModal from "@/Pages/Goals/GoalAutoDepositModal";
 import {dateFormat, uppercaseFirst} from "@/utils";
 import DeleteResourceButton from "@/Components/DeleteResourceButton";
+import BalanceLineChart from "@/Components/BalanceLineChart";
 
-export default function Show({ auth, goal, accounts }: PageProps<{ goal: GoalType, accounts: Account[] }>) {
+export default function Show({ auth, goal, goalBalanceHistory, accounts }: PageProps<{ goal: GoalType, goalBalanceHistory: BalanceHistory[], accounts: Account[] }>) {
 
     const { patch } = useForm();
 
@@ -22,6 +23,12 @@ export default function Show({ auth, goal, accounts }: PageProps<{ goal: GoalTyp
             preserveScroll: true,
         });
     }
+
+    const apexCategories = goalBalanceHistory.map((history) => history.date);
+    const apexSeries = [{
+        name: 'Balance',
+        data: goalBalanceHistory.map((history) => history.balance.amount),
+    }];
 
     const [showCreateAutoDepositModal, setShowCreateAutoDepositModal] = useState(false);
 
@@ -57,7 +64,7 @@ export default function Show({ auth, goal, accounts }: PageProps<{ goal: GoalTyp
                                     <h2 className="font-semibold text-xl text-gray-900 inline-flex">
                                         Current progress
                                     </h2>
-                                    <p>Current amount: <MoneyDisplay money={goal.current_amount} /></p>
+                                    <p>Current amount: <MoneyDisplay money={goal.balance} /></p>
                                     <LineProgress status={goal.status} percentage={goal.completion_percentage} />
                                 </div>
                                 <div className="max-w p-5 bg-white border border-gray-200 rounded-lg shadow">
@@ -68,6 +75,8 @@ export default function Show({ auth, goal, accounts }: PageProps<{ goal: GoalTyp
                                     <LineProgress status={goal.projected_status} percentage={goal.projected_completion_percentage} />
                                 </div>
                             </div>
+
+                            <BalanceLineChart categories={apexCategories} series={apexSeries} />
 
                             <div className="p-5 mt-4 bg-white border border-gray-200 rounded-lg shadow">
                                 <div className="flex justify-between items-center pb-1">
