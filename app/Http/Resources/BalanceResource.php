@@ -2,12 +2,12 @@
 
 namespace App\Http\Resources;
 
-use App\Models\AccountBalance;
+use App\Models\Balance;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin AccountBalance */
-class AccountBalanceResource extends JsonResource
+/** @mixin Balance */
+class BalanceResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

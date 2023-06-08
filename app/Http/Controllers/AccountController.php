@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DestroyAccountRequest;
 use App\Http\Requests\StoreAccountRequest;
 use App\Http\Requests\UpdateAccountRequest;
-use App\Http\Resources\AccountBalanceResource;
+use App\Http\Resources\BalanceResource;
 use App\Http\Resources\AccountResource;
 use App\Models\Account;
 use Inertia\Inertia;
@@ -38,7 +38,7 @@ class AccountController extends Controller
     {
         return Inertia::render('Accounts/Show', [
             'account' => new AccountResource($account),
-            'accountBalanceHistory' => AccountBalanceResource::collection($account->balances),
+            'accountBalanceHistory' => BalanceResource::collection($account->balances),
         ]);
     }
 
