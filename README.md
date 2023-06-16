@@ -31,3 +31,5 @@
 - Allow renaming account/goal/cc by clicking on the name on the view page
 - Allow entering last 4 digits of credit card number and account (optional for account)
 - Fix goal auto deposit edit modal
+
+wooyeah
