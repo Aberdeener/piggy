@@ -13,7 +13,6 @@
 - `npm run dev` in one terminal
 - `php artisan serve` in another terminal
 - Visit `http://localhost:8000` in your browser, login with `tadhgsmboyle@gmail.com` and `password`
-- W
 
 ### Code locations
 - Frontend: `resources/`
